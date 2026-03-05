@@ -1,15 +1,13 @@
 :root{
-  --bg:#f5f8ff;
+  --bg:#f6f9ff;
   --panel:#ffffff;
-  --card:#ffffff;
   --border:rgba(15,23,42,.12);
   --text:#0f172a;
   --muted:#475569;
 
-  --accent:#2563eb;   /* azul */
-  --accent2:#22c55e;  /* verde */
-  --warn:#f59e0b;
-  --bad:#ef4444;
+  --blue:#2563eb;
+  --green:#22c55e;
+  --red:#ef4444;
 
   --radius:18px;
 }
@@ -18,20 +16,20 @@
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background: radial-gradient(900px 420px at 15% 0%, rgba(37,99,235,.12), transparent),
-              radial-gradient(800px 400px at 90% 10%, rgba(34,197,94,.10), transparent),
-              var(--bg);
+  background:
+    radial-gradient(900px 420px at 15% 0%, rgba(37,99,235,.12), transparent),
+    radial-gradient(800px 400px at 90% 10%, rgba(34,197,94,.10), transparent),
+    var(--bg);
   color:var(--text);
 }
 
-/* Bigger overall spacing for 7" tablets */
 .wrap{ max-width: 1100px; margin:0 auto; padding:18px; }
 
 .topbar{
   display:flex; align-items:center; justify-content:space-between;
   padding:14px 18px;
   border-bottom:1px solid var(--border);
-  background: rgba(255,255,255,.88);
+  background: rgba(255,255,255,.92);
   backdrop-filter: blur(10px);
   position: sticky; top:0; z-index: 10;
 }
@@ -43,14 +41,14 @@ body{
   background: linear-gradient(135deg, rgba(37,99,235,.18), rgba(34,197,94,.10));
   border:1px solid rgba(37,99,235,.25);
   font-weight:900;
-  color: var(--accent);
+  color: var(--blue);
   font-size: 20px;
 }
 .brandName{ font-weight:900; letter-spacing:.2px; font-size: 18px; }
 .brandSub{ font-size: 13px; color: var(--muted); margin-top:2px; }
 
 .card{
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.94);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px;
@@ -102,6 +100,7 @@ select{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  margin-top: 14px;
 }
 .tile{
   text-align:left;
@@ -171,18 +170,6 @@ select{
   font-weight: 800;
 }
 
-/* NEW: origin coloring */
-.pill-bank{
-  border-color: rgba(34,197,94,.35);
-  color: #166534;
-  background: rgba(34,197,94,.10);
-}
-.pill-gen{
-  border-color: rgba(37,99,235,.35);
-  color: #1e3a8a;
-  background: rgba(37,99,235,.10);
-}
-
 .quizBody{ margin-top: 12px; }
 .topicLine{ font-size: 14px; color: var(--muted); font-weight: 700; }
 .prompt{
@@ -230,7 +217,10 @@ select{
 
 .hint{ margin-top: 10px; font-size: 13px; }
 
-.resultsBody{ margin-top: 10px; }
+.resultsTitle{ margin: 0 0 8px; }
+.scoreLine{ font-weight: 900; font-size: 18px; margin-bottom: 10px; }
+.review{ margin-top: 10px; }
+.review ul{ padding-left: 18px; line-height: 1.55; }
 .resultsActions{ display:flex; gap:12px; margin-top: 12px; }
 .resultsActions .btn{ width:auto; flex:1; }
 
