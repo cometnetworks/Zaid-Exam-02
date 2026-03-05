@@ -284,34 +284,50 @@
     return pool.filter(q => q.subject === subject);
   }
 
-  function pickFromBank(subject, total, doShuffle, phase){
-    let pool = bankPool(subject, phase);
-    if (doShuffle) pool = shuffle(pool);
-    const chosen = [];
-    let k = 0;
-    while (chosen.length < total){
-      chosen.push(pool[k % pool.length]);
-      k++;
+ function pickFromBank(subject, total, doShuffle, phase){
+  let pool = bankPool(subject, phase);
+  if (!pool.length) pool = BANK.slice();
+
+  // shuffle to avoid same order
+  if (doShuffle) pool = shuffle(pool);
+
+  // IMPORTANT: do not repeat within the session
+  return pool.slice(0, total);
     }
     return chosen.slice(0, total);
   }
 
   function buildSessionQuestions({subject,total,doShuffle,source,phase}){
-    if (source === "bank") {
-      const qs = pickFromBank(subject, total, doShuffle, phase);
-      return doShuffle ? shuffle(qs) : qs;
+  const want = total;
+
+  if (source === "bank") {
+    const bankPoolList = pickFromBank(subject, want, doShuffle, phase);
+
+    // If bank doesn't have enough questions, fill the rest with generated
+    if (bankPoolList.length < want) {
+      const missing = want - bankPoolList.length;
+      const genPart = generateQuestions(subject, missing, phase);
+      let qs = [...bankPoolList, ...genPart];
+      qs = doShuffle ? shuffle(qs) : qs;
+      return qs.slice(0, want);
     }
-    if (source === "generated") {
-      const qs = generateQuestions(subject, total, phase);
-      return doShuffle ? shuffle(qs) : qs;
-    }
-    // mixed
-    const half = Math.ceil(total/2);
-    const bankPart = pickFromBank(subject, half, doShuffle, phase);
-    const genPart  = generateQuestions(subject, total-half, phase);
-    let qs = [...bankPart, ...genPart];
-    qs = doShuffle ? shuffle(qs) : qs;
-    return qs.slice(0, total);
+
+    return bankPoolList;
+  }
+
+  if (source === "generated") {
+    const qs = generateQuestions(subject, want, phase);
+    return doShuffle ? shuffle(qs) : qs;
+  }
+
+  // mixed
+  const half = Math.ceil(want/2);
+  const bankPart = pickFromBank(subject, half, doShuffle, phase);
+  const genPart  = generateQuestions(subject, want - bankPart.length, phase);
+
+  let qs = [...bankPart, ...genPart];
+  qs = doShuffle ? shuffle(qs) : qs;
+  return qs.slice(0, want);
   }
 
   /* -------------------------
