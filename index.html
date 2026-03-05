@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Zaíd Smart Test</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -12,15 +12,13 @@
       <div class="logo">Z</div>
       <div>
         <div class="brandName">Zaíd Smart Test</div>
-        <div class="brandSub">Sesiones de estudio guiadas — 1° Primaria (Fase 1)</div>
+        <div class="brandSub">1° Primaria • Temario ALINA • Práctica diaria</div>
       </div>
     </div>
 
-    <div class="topActions">
-      <button id="parentsToggleBtn" class="btn btn-secondary" aria-pressed="false">
-        👨‍👩‍👦 Ayuda para padres: OFF
-      </button>
-    </div>
+    <button id="parentsToggleBtn" class="btn btn-ghost" aria-pressed="false">
+      👨‍👩‍👦 Ayuda para padres: OFF
+    </button>
   </header>
 
   <main class="wrap">
@@ -28,158 +26,139 @@
     <section id="screen-home" class="card">
       <div class="hero">
         <div class="heroText">
-          <h1>Hola 👋 Vamos a estudiar con Zaíd</h1>
+          <h1>Estudio sin estrés (y sin “aprenderse la respuesta de memoria” 😄)</h1>
           <p class="muted">
-            Elige una materia (o Mixto), define cuántas preguntas (hasta 40) y empieza una sesión.
-            La opción <strong>Ayuda para padres</strong> muestra la respuesta correcta y una explicación.
+            Elige una asignatura y un ítem del temario. Puedes practicar hasta 40 preguntas por ítem.
+            Las preguntas cambian para que Zaíd aprenda a <strong>pensar</strong>, no solo repetir.
           </p>
+
           <div class="note">
-            Tip: Si hoy Zaíd está cansado, usa <strong>10 preguntas</strong>. Si anda modo “superhéroe”, dale <strong>30–40</strong>.
+            <strong>Tip para papás:</strong> activen “Ayuda para padres” para revelar la respuesta correcta
+            y explicar en 1 frase. (Eso vale oro.)
+          </div>
+
+          <div class="tiles">
+            <button class="tile" data-subject="Español">
+              <div class="tileIcon">📚</div>
+              <div class="tileTitle">Español</div>
+              <div class="tileSub">Notas, poema, carta, cuento, teatro…</div>
+            </button>
+
+            <button class="tile" data-subject="Matemáticas">
+              <div class="tileIcon">🧠</div>
+              <div class="tileTitle">Matemáticas</div>
+              <div class="tileSub">Números, figuras, suma/resta, problemas…</div>
+            </button>
+
+            <button class="tile" data-subject="Inglés">
+              <div class="tileIcon">🇬🇧</div>
+              <div class="tileTitle">Inglés</div>
+              <div class="tileSub">Colors, family, snack time, grammar…</div>
+            </button>
+
+            <button class="tile" data-subject="Ética">
+              <div class="tileIcon">🌿</div>
+              <div class="tileTitle">Ética, Naturaleza y Sociedades</div>
+              <div class="tileSub">Seres vivos, entornos, movimientos, cuidado…</div>
+            </button>
           </div>
         </div>
 
         <div class="heroCard">
-          <div class="heroCardTitle">Configurar sesión</div>
+          <div class="heroCardTitle">Configura una sesión</div>
 
           <div class="grid2">
             <div>
-              <label for="gradePhase">Fase</label>
-              <select id="gradePhase">
-                <option value="P1-F1" selected>1° Primaria — Fase 1</option>
-                <option value="P1-F2" disabled>1° Primaria — Fase 2 (próximamente)</option>
-                <option value="P1-F3" disabled>1° Primaria — Fase 3 (próximamente)</option>
-              </select>
-              <div class="help">La idea es ir agregando ítems por fases conforme avance.</div>
+              <label>Asignatura</label>
+              <select id="subjectSel"></select>
+              <div class="help">Puedes elegir “Mixto (todo)” también.</div>
             </div>
-
             <div>
-              <label for="questionSource">Fuente</label>
-              <select id="questionSource">
-                <option value="mixed" selected>Mixto (Banco + Generadas)</option>
-                <option value="bank">Solo Banco</option>
-                <option value="generated">Solo Generadas</option>
-              </select>
-              <div class="help">Mixto da estabilidad + variedad.</div>
+              <label>Ítem del temario</label>
+              <select id="itemSel"></select>
+              <div class="help">Cada ítem genera preguntas diferentes.</div>
             </div>
           </div>
 
           <div class="grid2">
             <div>
-              <label for="questionCount">Cantidad</label>
-              <select id="questionCount">
-                <option>10</option>
-                <option>15</option>
-                <option selected>20</option>
-                <option>30</option>
-                <option>40</option>
+              <label>Preguntas (10–40)</label>
+              <select id="countSel">
+                <option>10</option><option>15</option><option selected>20</option>
+                <option>25</option><option>30</option><option>35</option><option>40</option>
               </select>
-              <div class="help">Hasta 40 por sesión (para sesiones completas).</div>
             </div>
-
             <div>
-              <label for="sessionMode">Modo</label>
-              <select id="sessionMode">
-                <option value="practice" selected>Práctica (feedback inmediato)</option>
-                <option value="exam">Examen (resultados al final)</option>
+              <label>Modo</label>
+              <select id="modeSel">
+                <option value="practice" selected>Práctica (te dice al momento)</option>
+                <option value="exam">Examen (resultado al final)</option>
               </select>
-              <div class="help">Práctica es lo ideal para aprender.</div>
             </div>
           </div>
 
           <div class="grid2">
             <div>
-              <label for="difficulty">Dificultad</label>
-              <select id="difficulty">
-                <option value="easy" selected>Fácil</option>
-                <option value="normal">Normal</option>
+              <label>Mezclar preguntas</label>
+              <select id="shuffleSel">
+                <option value="yes" selected>Sí</option>
+                <option value="no">No</option>
               </select>
-              <div class="help">Normal = distractores más “cercanos”.</div>
             </div>
-
             <div>
-              <label for="shuffle">Orden</label>
-              <select id="shuffle">
-                <option value="yes" selected>Aleatorio</option>
-                <option value="no">En orden</option>
+              <label>Tipo de sesión</label>
+              <select id="mixSel">
+                <option value="item" selected>Solo este ítem</option>
+                <option value="subject">Mixto de la asignatura</option>
+                <option value="all">Mixto general (todo)</option>
               </select>
-              <div class="help">Aleatorio evita memorizar por posición.</div>
             </div>
           </div>
 
           <div class="divider"></div>
 
-          <div class="tiles">
-            <button class="tile tile-es" data-subject="Español">
-              <div class="tileIcon">📘</div>
-              <div class="tileTitle">Español</div>
-              <div class="tileSub">Cuento, carta, signos, poema…</div>
-            </button>
-
-            <button class="tile tile-ma" data-subject="Matemáticas">
-              <div class="tileIcon">🔢</div>
-              <div class="tileTitle">Matemáticas</div>
-              <div class="tileSub">Números, figuras, días, sumas…</div>
-            </button>
-
-            <button class="tile tile-in" data-subject="Inglés">
-              <div class="tileIcon">🌈</div>
-              <div class="tileTitle">Inglés</div>
-              <div class="tileSub">Colors, family, there is/are…</div>
-            </button>
-
-            <button class="tile tile-et" data-subject="Ética">
-              <div class="tileIcon">🌿</div>
-              <div class="tileTitle">Conocimiento del medio</div>
-              <div class="tileSub">Biótico/abiótico, respeto, entorno…</div>
-            </button>
-
-            <button class="tile tile-mx" data-subject="Mixto">
-              <div class="tileIcon">🧠</div>
-              <div class="tileTitle">Mixto</div>
-              <div class="tileSub">Un poquito de todo</div>
-            </button>
-          </div>
-
           <div class="startRow">
-            <button id="startMixedBtn" class="btn btn-primary">
-              🚀 Empezar sesión (Mixto)
-            </button>
+            <button id="startBtn" class="btn btn-primary">🚀 Iniciar sesión</button>
           </div>
 
           <div class="micro muted">
-            “Ayuda para padres” es visible arriba y funciona durante el quiz y resultados.
+            <strong>Sin repetición en la sesión:</strong> no verás la misma pregunta 2 veces en una sesión.
           </div>
         </div>
+      </div>
+
+      <div class="footer">
+        Zaíd Smart Test • MVP listo para Cloudflare Pages • Diseño para tablet 7"
       </div>
     </section>
 
     <!-- QUIZ -->
     <section id="screen-quiz" class="card hidden">
       <div class="quizHeader">
-        <button id="homeBtn1" class="btn btn-ghost">← Inicio</button>
+        <button id="homeBtn" class="btn btn-ghost">← Inicio</button>
+
         <div class="quizMeta">
           <div class="pill" id="pillProgress">1/20</div>
-          <div class="pill" id="pillSubject">Mixto</div>
-          <div class="pill" id="pillSource">Mixto</div>
-          <div class="pill" id="pillOrigin">Fuente: Banco</div>
+          <div class="pill" id="pillSubject">Español</div>
+          <div class="pill" id="pillItem">Ítem: —</div>
           <div class="pill" id="pillParents">Ayuda: OFF</div>
         </div>
       </div>
 
       <div class="quizBody">
         <div class="topicLine" id="topicLine">Tema: —</div>
-        <div class="prompt" id="prompt">—</div>
+        <div class="prompt" id="prompt">…</div>
 
         <div class="options" id="options"></div>
 
-        <div class="feedback hidden" id="feedback"></div>
+        <div id="feedback" class="feedback hidden"></div>
 
         <div class="quizActions">
-          <button id="revealBtn" class="btn btn-secondary hidden">👁 Ver respuesta</button>
-          <button id="nextBtn" class="btn btn-primary" disabled>Siguiente ➜</button>
+          <button id="revealBtn" class="btn btn-secondary hidden">👁 Revelar respuesta</button>
+          <button id="nextBtn" class="btn btn-primary" disabled>Siguiente →</button>
         </div>
 
-        <div class="hint muted" id="hintLine"></div>
+        <div class="hint muted" id="hintLine">Tip: En práctica te avisa al momento.</div>
       </div>
     </section>
 
@@ -188,27 +167,21 @@
       <div class="quizHeader">
         <button id="homeBtn2" class="btn btn-ghost">← Inicio</button>
         <div class="quizMeta">
-          <div class="pill" id="resultsPill">Resultados</div>
           <div class="pill" id="resultsParentsPill">Ayuda: OFF</div>
         </div>
       </div>
 
       <div class="resultsBody">
-        <h2 id="scoreLine">—</h2>
-        <p class="muted">Tip: si Zaíd falló un tema, repite una sesión corta de 10 preguntas solo de esa materia.</p>
-        <div class="divider"></div>
-        <div id="review"></div>
+        <h2 class="resultsTitle">Resultados</h2>
+        <div class="scoreLine" id="scoreLine">—</div>
+        <div class="review" id="review"></div>
 
         <div class="resultsActions">
-          <button id="retryBtn" class="btn btn-secondary">🔁 Repetir misma sesión</button>
-          <button id="newBtn" class="btn btn-primary">✨ Nueva sesión</button>
+          <button id="retryBtn" class="btn btn-secondary">🔁 Repetir sesión</button>
+          <button id="newBtn" class="btn btn-primary">🧩 Nueva sesión</button>
         </div>
       </div>
     </section>
-
-    <footer class="footer muted">
-      Zaíd Smart Test — diseñado para sesiones rápidas y claras. (Sin login, sin datos personales.)
-    </footer>
   </main>
 
   <script src="./app.js"></script>
