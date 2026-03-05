@@ -33,7 +33,7 @@
   const itemsHint = $("itemsHint");
   const itemsList = $("itemsList");
 
-  const homeBtn1 = $("homeBtn1");
+  const homeBtn = $("homeBtn");
   const homeBtn2 = $("homeBtn2");
 
   const pillProgress = $("pillProgress");
@@ -59,7 +59,7 @@
   const sndWrong = $("snd-wrong");
   const sndCheer = $("snd-cheer");
 
-  function playSnd(audioEl){
+  function playSnd(audioEl) {
     if (!audioEl) return;
     audioEl.currentTime = 0;
     audioEl.play().catch(e => console.log("Audio play prevented:", e));
@@ -83,45 +83,45 @@
   };
 
   /* ---------- Random (seeded) ---------- */
-  function xmur3(str){
+  function xmur3(str) {
     let h = 1779033703 ^ str.length;
-    for (let i = 0; i < str.length; i++){
+    for (let i = 0; i < str.length; i++) {
       h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
       h = (h << 13) | (h >>> 19);
     }
-    return function(){
+    return function () {
       h = Math.imul(h ^ (h >>> 16), 2246822507);
       h = Math.imul(h ^ (h >>> 13), 3266489909);
       h ^= h >>> 16;
       return h >>> 0;
     };
   }
-  function mulberry32(a){
-    return function(){
+  function mulberry32(a) {
+    return function () {
       let t = (a += 0x6D2B79F5);
       t = Math.imul(t ^ (t >>> 15), t | 1);
       t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
-  function makeRng(seedStr){
+  function makeRng(seedStr) {
     const seed = xmur3(seedStr)();
     return mulberry32(seed);
   }
-  function rInt(rng, a, b){ return Math.floor(rng() * (b - a + 1)) + a; }
-  function pick(rng, arr){ return arr[rInt(rng, 0, arr.length - 1)]; }
-  function shuffle(rng, arr){
+  function rInt(rng, a, b) { return Math.floor(rng() * (b - a + 1)) + a; }
+  function pick(rng, arr) { return arr[rInt(rng, 0, arr.length - 1)]; }
+  function shuffle(rng, arr) {
     const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--){
+    for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
   }
-  function uniq(arr){ return Array.from(new Set(arr)); }
+  function uniq(arr) { return Array.from(new Set(arr)); }
 
   /* ---------- Question builder ---------- */
-  function mcq({ id, subject, itemId, topic, prompt, correct, distractors, explanation }){
+  function mcq({ id, subject, itemId, topic, prompt, correct, distractors, explanation }) {
     let options = uniq([correct, ...distractors]);
     while (options.length < 3) options.push("Ninguna de las anteriores");
     options = options.slice(0, 4);
@@ -145,32 +145,32 @@
 
   const EN = {
     colors: [
-      { es:"verde", en:"green" }, { es:"rosa", en:"pink" }, { es:"gris", en:"gray" },
-      { es:"morado", en:"purple" }, { es:"azul", en:"blue" }, { es:"rojo", en:"red" },
-      { es:"amarillo", en:"yellow" }, { es:"naranja", en:"orange" }, { es:"blanco", en:"white" },
-      { es:"café", en:"brown" }, { es:"negro", en:"black" }
+      { es: "verde", en: "green" }, { es: "rosa", en: "pink" }, { es: "gris", en: "gray" },
+      { es: "morado", en: "purple" }, { es: "azul", en: "blue" }, { es: "rojo", en: "red" },
+      { es: "amarillo", en: "yellow" }, { es: "naranja", en: "orange" }, { es: "blanco", en: "white" },
+      { es: "café", en: "brown" }, { es: "negro", en: "black" }
     ],
     family: [
-      { es:"papá", en:"dad" }, { es:"mamá", en:"mom" }, { es:"hermana", en:"sister" },
-      { es:"hermano", en:"brother" }, { es:"abuelo", en:"grandpa" }, { es:"abuela", en:"grandma" }
+      { es: "papá", en: "dad" }, { es: "mamá", en: "mom" }, { es: "hermana", en: "sister" },
+      { es: "hermano", en: "brother" }, { es: "abuelo", en: "grandpa" }, { es: "abuela", en: "grandma" }
     ],
     snacks: [
-      { es:"sándwich", en:"sandwich" }, { es:"plátano", en:"banana" }, { es:"zanahoria", en:"carrot" },
-      { es:"dona", en:"donut" }, { es:"cupcake", en:"cupcake" }, { es:"galleta", en:"cookie" },
-      { es:"hamburguesa", en:"hamburger" }, { es:"pera", en:"pear" }, { es:"piña", en:"pineapple" },
-      { es:"hot dog", en:"hot dog" }
+      { es: "sándwich", en: "sandwich" }, { es: "plátano", en: "banana" }, { es: "zanahoria", en: "carrot" },
+      { es: "dona", en: "donut" }, { es: "cupcake", en: "cupcake" }, { es: "galleta", en: "cookie" },
+      { es: "hamburguesa", en: "hamburger" }, { es: "pera", en: "pear" }, { es: "piña", en: "pineapple" },
+      { es: "hot dog", en: "hot dog" }
     ]
   };
 
   const NAHUATL = [
-    { word:"chocolate", meaning:"bebida o dulce de cacao" },
-    { word:"tomate", meaning:"fruto rojo para cocinar" },
-    { word:"aguacate", meaning:"fruto verde cremoso" },
-    { word:"elote", meaning:"maíz tierno" },
-    { word:"chile", meaning:"picante" },
-    { word:"atole", meaning:"bebida caliente de maíz" },
-    { word:"comal", meaning:"plancha para cocinar tortillas" },
-    { word:"coyote", meaning:"animal parecido a un perro salvaje" }
+    { word: "chocolate", meaning: "bebida o dulce de cacao" },
+    { word: "tomate", meaning: "fruto rojo para cocinar" },
+    { word: "aguacate", meaning: "fruto verde cremoso" },
+    { word: "elote", meaning: "maíz tierno" },
+    { word: "chile", meaning: "picante" },
+    { word: "atole", meaning: "bebida caliente de maíz" },
+    { word: "comal", meaning: "plancha para cocinar tortillas" },
+    { word: "coyote", meaning: "animal parecido a un perro salvaje" }
   ];
 
   const ITEMS = [
@@ -222,12 +222,12 @@
     item("Ética", "eti-cuidado", "Cuidado de mi entorno", genEticaCuidado),
   ];
 
-  function item(subject, id, title, gen){
+  function item(subject, id, title, gen) {
     return { subject, id, title, gen };
   }
 
   /* ---------- Generators: Español ---------- */
-  function genEspanolNotas(rng, meta){
+  function genEspanolNotas(rng, meta) {
     const parts = ["título", "fecha", "lugar", "qué pasó", "quién", "cuándo", "dónde", "por qué", "cómo"];
     const templates = [
       () => mcq({
@@ -241,11 +241,11 @@
       () => {
         const p = pick(rng, parts);
         return mcq({
-          id: qid(meta, "p2-"+p),
+          id: qid(meta, "p2-" + p),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cuál de estas puede ser una parte de una nota informativa?`,
           correct: p,
-          distractors: shuffle(rng, ["rima", "estrofa", "personaje ficticio", "tablero"]).slice(0,3),
+          distractors: shuffle(rng, ["rima", "estrofa", "personaje ficticio", "tablero"]).slice(0, 3),
           explanation: "Las notas informativas incluyen datos como: qué pasó, cuándo, dónde, etc."
         });
       },
@@ -261,7 +261,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolPoema(rng, meta){
+  function genEspanolPoema(rng, meta) {
     const onos = ["miau", "guau", "tic-tac", "pum", "zas", "crash", "pío pío"];
     const templates = [
       () => mcq({
@@ -284,10 +284,10 @@
         const a = pick(rng, ["casa", "sala", "taza", "pasa"]);
         const b = pick(rng, ["luna", "cuna", "una", "laguna"]);
         return mcq({
-          id: qid(meta, "rima-"+a+"-"+b),
+          id: qid(meta, "rima-" + a + "-" + b),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál par de palabras rima?",
-          correct: `${a} - ${pick(rng, ["sala","taza","pasa"])}`,
+          correct: `${a} - ${pick(rng, ["sala", "taza", "pasa"])}`,
           distractors: [`${a} - ${b}`, `${b} - casa`, `mesa - luna`],
           explanation: "Riman cuando suenan parecido al final."
         });
@@ -295,11 +295,11 @@
       () => {
         const ono = pick(rng, onos);
         return mcq({
-          id: qid(meta, "ono-"+ono),
+          id: qid(meta, "ono-" + ono),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál es una onomatopeya?",
           correct: ono,
-          distractors: shuffle(rng, ["mesa", "verde", "cuaderno", "escuela"]).slice(0,3),
+          distractors: shuffle(rng, ["mesa", "verde", "cuaderno", "escuela"]).slice(0, 3),
           explanation: "Onomatopeya = palabra que imita un sonido."
         });
       }
@@ -307,7 +307,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolJuegoMesa(rng, meta){
+  function genEspanolJuegoMesa(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "j1"),
@@ -337,17 +337,17 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolCarta(rng, meta){
+  function genEspanolCarta(rng, meta) {
     const parts = ["lugar", "fecha", "saludo", "cuerpo", "despedida", "firma", "remitente", "destinatario"];
     const templates = [
       () => {
         const p = pick(rng, parts);
         return mcq({
-          id: qid(meta, "carta-part-"+p),
+          id: qid(meta, "carta-part-" + p),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál puede ser una parte de una carta?",
           correct: p,
-          distractors: shuffle(rng, ["rima", "verso", "tablero", "acotación"]).slice(0,3),
+          distractors: shuffle(rng, ["rima", "verso", "tablero", "acotación"]).slice(0, 3),
           explanation: "Una carta tiene partes como saludo, cuerpo, despedida, firma…"
         });
       },
@@ -371,7 +371,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolContextos(rng, meta){
+  function genEspanolContextos(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "ctx1"),
@@ -391,13 +391,13 @@
       }),
       () => {
         const ex = pick(rng, [
-          { p:"Hacer tarea con mamá en casa", c:"contexto familiar" },
-          { p:"Leer en clase con la maestra", c:"contexto escolar" },
-          { p:"Jugar con mis primos en casa", c:"contexto familiar" },
-          { p:"Formación y honores a la bandera", c:"contexto escolar" }
+          { p: "Hacer tarea con mamá en casa", c: "contexto familiar" },
+          { p: "Leer en clase con la maestra", c: "contexto escolar" },
+          { p: "Jugar con mis primos en casa", c: "contexto familiar" },
+          { p: "Formación y honores a la bandera", c: "contexto escolar" }
         ]);
         return mcq({
-          id: qid(meta, "ctx3-"+ex.c),
+          id: qid(meta, "ctx3-" + ex.c),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `“${ex.p}” pertenece al…`,
           correct: ex.c,
@@ -409,27 +409,27 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolNahuatl(rng, meta){
+  function genEspanolNahuatl(rng, meta) {
     const templates = [
       () => {
         const w = pick(rng, NAHUATL);
         return mcq({
-          id: qid(meta, "nah-"+w.word),
+          id: qid(meta, "nah-" + w.word),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cuál palabra viene del Náhuatl?`,
           correct: w.word,
-          distractors: shuffle(rng, ["cuaderno", "ventana", "zapato", "casa"]).slice(0,3),
+          distractors: shuffle(rng, ["cuaderno", "ventana", "zapato", "casa"]).slice(0, 3),
           explanation: `Ejemplo: "${w.word}" es una palabra de origen náhuatl.`
         });
       },
       () => {
         const w = pick(rng, NAHUATL);
         return mcq({
-          id: qid(meta, "nah-mean-"+w.word),
+          id: qid(meta, "nah-mean-" + w.word),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Qué significa aproximadamente "${w.word}"?`,
           correct: w.meaning,
-          distractors: shuffle(rng, NAHUATL.filter(x=>x.word!==w.word).map(x=>x.meaning)).slice(0,3),
+          distractors: shuffle(rng, NAHUATL.filter(x => x.word !== w.word).map(x => x.meaning)).slice(0, 3),
           explanation: `Se asocia con: ${w.meaning}.`
         });
       }
@@ -437,7 +437,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolVivencias(rng, meta){
+  function genEspanolVivencias(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "viv1"),
@@ -472,7 +472,7 @@
         const correct = seq.join(" → ");
         const wrong = shuffle(rng, seq.slice()).reverse().join(" → ");
         return mcq({
-          id: qid(meta, "viv-orden-"+seq[0]),
+          id: qid(meta, "viv-orden-" + seq[0]),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál está en orden correcto?",
           correct,
@@ -484,7 +484,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolCuento(rng, meta){
+  function genEspanolCuento(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "cu1"),
@@ -519,7 +519,7 @@
         const correct = seq.join(" → ");
         const wrong = shuffle(rng, seq.slice()).reverse().join(" → ");
         return mcq({
-          id: qid(meta, "cu-orden-"+seq[0]),
+          id: qid(meta, "cu-orden-" + seq[0]),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál es el orden correcto de los sucesos?",
           correct,
@@ -531,7 +531,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEspanolTeatro(rng, meta){
+  function genEspanolTeatro(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "t1"),
@@ -567,17 +567,17 @@
       }),
       () => {
         const ex = pick(rng, [
-          {p:"Un dragón que habla", c:"ficticio"},
-          {p:"Un niño real en la escuela", c:"real"},
-          {p:"Un robot mágico", c:"ficticio"},
-          {p:"Una maestra que da clase", c:"real"}
+          { p: "Un dragón que habla", c: "ficticio" },
+          { p: "Un niño real en la escuela", c: "real" },
+          { p: "Un robot mágico", c: "ficticio" },
+          { p: "Una maestra que da clase", c: "real" }
         ]);
         return mcq({
-          id: qid(meta, "t-real-"+ex.c),
+          id: qid(meta, "t-real-" + ex.c),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `“${ex.p}” es un personaje…`,
           correct: ex.c,
-          distractors: ["real","ficticio"].filter(x=>x!==ex.c),
+          distractors: ["real", "ficticio"].filter(x => x !== ex.c),
           explanation: "Real = existe; ficticio = inventado."
         });
       }
@@ -586,27 +586,27 @@
   }
 
   /* ---------- Generators: Matemáticas ---------- */
-  function genMatNumeros150(rng, meta){
+  function genMatNumeros150(rng, meta) {
     const templates = [
       () => {
         const n = rInt(rng, 1, 149);
         return mcq({
-          id: qid(meta, "nxt-"+n),
+          id: qid(meta, "nxt-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Qué número va después de ${n}?`,
-          correct: String(n+1),
-          distractors: [String(n-1), String(n+2), String(n+10)],
+          correct: String(n + 1),
+          distractors: [String(n - 1), String(n + 2), String(n + 10)],
           explanation: "Después = sumar 1."
         });
       },
       () => {
         const n = rInt(rng, 2, 150);
         return mcq({
-          id: qid(meta, "prev-"+n),
+          id: qid(meta, "prev-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Qué número va antes de ${n}?`,
-          correct: String(n-1),
-          distractors: [String(n+1), String(n-2), String(n-10)],
+          correct: String(n - 1),
+          distractors: [String(n + 1), String(n - 2), String(n - 10)],
           explanation: "Antes = restar 1."
         });
       }
@@ -614,16 +614,16 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatEscritura100(rng, meta){
+  function genMatEscritura100(rng, meta) {
     const templates = [
       () => {
         const n = rInt(rng, 1, 100);
         return mcq({
-          id: qid(meta, "num-"+n),
+          id: qid(meta, "num-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `Selecciona el número: ${n}`,
           correct: String(n),
-          distractors: shuffle(rng, [String(n+1), String(Math.max(1,n-1)), String(rInt(rng,1,100))]).slice(0,3),
+          distractors: shuffle(rng, [String(n + 1), String(Math.max(1, n - 1)), String(rInt(rng, 1, 100))]).slice(0, 3),
           explanation: "Lee con calma el número."
         });
       }
@@ -631,24 +631,24 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatFiguras(rng, meta){
+  function genMatFiguras(rng, meta) {
     const figs = [
-      {name:"círculo", props:"es redondo", wrong:["rombo","rectángulo","paralelogramo"]},
-      {name:"rectángulo", props:"parece una puerta", wrong:["círculo","rombo","óvalo"]},
-      {name:"cuadrado", props:"tiene 4 lados iguales", wrong:["rectángulo","óvalo","rombo"]},
-      {name:"óvalo", props:"parece un huevo", wrong:["círculo","rectángulo","rombo"]},
-      {name:"paralelogramo", props:"parece un rectángulo inclinado", wrong:["círculo","óvalo","cuadrado"]},
-      {name:"rombo", props:"parece un diamante", wrong:["círculo","rectángulo","cuadrado"]}
+      { name: "círculo", props: "es redondo", wrong: ["rombo", "rectángulo", "paralelogramo"] },
+      { name: "rectángulo", props: "parece una puerta", wrong: ["círculo", "rombo", "óvalo"] },
+      { name: "cuadrado", props: "tiene 4 lados iguales", wrong: ["rectángulo", "óvalo", "rombo"] },
+      { name: "óvalo", props: "parece un huevo", wrong: ["círculo", "rectángulo", "rombo"] },
+      { name: "paralelogramo", props: "parece un rectángulo inclinado", wrong: ["círculo", "óvalo", "cuadrado"] },
+      { name: "rombo", props: "parece un diamante", wrong: ["círculo", "rectángulo", "cuadrado"] }
     ];
     const templates = [
       () => {
         const f = pick(rng, figs);
         return mcq({
-          id: qid(meta, "fig-"+f.name),
+          id: qid(meta, "fig-" + f.name),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cuál figura ${f.props}?`,
           correct: f.name,
-          distractors: shuffle(rng, f.wrong).slice(0,3),
+          distractors: shuffle(rng, f.wrong).slice(0, 3),
           explanation: `La figura correcta es ${f.name}.`
         });
       }
@@ -656,14 +656,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatTangram(rng, meta){
+  function genMatTangram(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "tg1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "¿Cuántas piezas tiene el tangram clásico?",
         correct: "7",
-        distractors: ["5","6","8"],
+        distractors: ["5", "6", "8"],
         explanation: "El tangram clásico usa 7 piezas."
       }),
       () => mcq({
@@ -671,14 +671,14 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "¿De dónde es originario el tangram?",
         correct: "China",
-        distractors: ["México","España","Canadá"],
+        distractors: ["México", "España", "Canadá"],
         explanation: "El tangram es un rompecabezas originario de China."
       })
     ];
     return build40(rng, templates, meta);
   }
 
-  function genMatVerticesLados(rng, meta){
+  function genMatVerticesLados(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "vl1"),
@@ -690,13 +690,13 @@
       }),
       () => {
         const ex = pick(rng, [
-          {shape:"círculo", correct:"lados curvos"},
-          {shape:"óvalo", correct:"lados curvos"},
-          {shape:"cuadrado", correct:"lados rectos"},
-          {shape:"rectángulo", correct:"lados rectos"}
+          { shape: "círculo", correct: "lados curvos" },
+          { shape: "óvalo", correct: "lados curvos" },
+          { shape: "cuadrado", correct: "lados rectos" },
+          { shape: "rectángulo", correct: "lados rectos" }
         ]);
         return mcq({
-          id: qid(meta, "vl2-"+ex.shape),
+          id: qid(meta, "vl2-" + ex.shape),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `La figura ${ex.shape} tiene…`,
           correct: ex.correct,
@@ -708,18 +708,18 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatAgrupacion(rng, meta){
+  function genMatAgrupacion(rng, meta) {
     const templates = [
       () => {
-        const total = pick(rng, [20,30,40,50,60]);
-        const g = pick(rng, [2,5,10]);
+        const total = pick(rng, [20, 30, 40, 50, 60]);
+        const g = pick(rng, [2, 5, 10]);
         const groups = total / g;
         return mcq({
-          id: qid(meta, "ag-"+total+"-"+g),
+          id: qid(meta, "ag-" + total + "-" + g),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `Si tengo ${total} objetos y los agrupo de ${g} en ${g}, ¿cuántos grupos hago?`,
           correct: String(groups),
-          distractors: shuffle(rng, [String(groups-1), String(groups+1), String(g)]).slice(0,3),
+          distractors: shuffle(rng, [String(groups - 1), String(groups + 1), String(g)]).slice(0, 3),
           explanation: `${total} ÷ ${g} = ${groups}.`
         });
       },
@@ -735,12 +735,12 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatMedidas(rng, meta){
+  function genMatMedidas(rng, meta) {
     const templates = [
       () => {
         const a = pick(rng, ["lápiz", "regla", "cuerda", "popote"]);
         return mcq({
-          id: qid(meta, "med-"+a),
+          id: qid(meta, "med-" + a),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `Si un ${a} A mide más que un ${a} B, ¿cuál es más largo?`,
           correct: "A",
@@ -752,37 +752,37 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatUnidadesDecenas(rng, meta){
+  function genMatUnidadesDecenas(rng, meta) {
     const templates = [
       () => {
         const n = rInt(rng, 10, 99);
-        const d = Math.floor(n/10);
+        const d = Math.floor(n / 10);
         return mcq({
-          id: qid(meta, "dec-"+n),
+          id: qid(meta, "dec-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `En el número ${n}, ¿cuántas decenas hay?`,
           correct: String(d),
-          distractors: shuffle(rng, [String(n%10), String(n), String(Math.max(0,d-1))]).slice(0,3),
-          explanation: `${n} = ${d} decenas y ${n%10} unidades.`
+          distractors: shuffle(rng, [String(n % 10), String(n), String(Math.max(0, d - 1))]).slice(0, 3),
+          explanation: `${n} = ${d} decenas y ${n % 10} unidades.`
         });
       },
       () => {
         const n = rInt(rng, 10, 99);
-        const u = n%10;
+        const u = n % 10;
         return mcq({
-          id: qid(meta, "uni-"+n),
+          id: qid(meta, "uni-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `En el número ${n}, ¿cuántas unidades hay?`,
           correct: String(u),
-          distractors: shuffle(rng, [String(Math.floor(n/10)), String(n), String((u+1)%10)]).slice(0,3),
-          explanation: `${n} = ${Math.floor(n/10)} decenas y ${u} unidades.`
+          distractors: shuffle(rng, [String(Math.floor(n / 10)), String(n), String((u + 1) % 10)]).slice(0, 3),
+          explanation: `${n} = ${Math.floor(n / 10)} decenas y ${u} unidades.`
         });
       }
     ];
     return build40(rng, templates, meta);
   }
 
-  function genMatRectaNumerica(rng, meta){
+  function genMatRectaNumerica(rng, meta) {
     const templates = [
       () => {
         const start = rInt(rng, 0, 20);
@@ -790,11 +790,11 @@
         const op = pick(rng, ["+", "-"]);
         const correct = op === "+" ? start + step : Math.max(0, start - step);
         return mcq({
-          id: qid(meta, "rn-"+start+op+step),
+          id: qid(meta, "rn-" + start + op + step),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `En la recta numérica: si estás en ${start} y ${op === "+" ? "avanzas" : "retrocedes"} ${step}, llegas a…`,
           correct: String(correct),
-          distractors: shuffle(rng, [String(correct+1), String(Math.max(0,correct-1)), String(start)]).slice(0,3),
+          distractors: shuffle(rng, [String(correct + 1), String(Math.max(0, correct - 1)), String(start)]).slice(0, 3),
           explanation: op === "+" ? "Avanzar = sumar." : "Retroceder = restar."
         });
       }
@@ -802,18 +802,18 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatDescompAditiva(rng, meta){
+  function genMatDescompAditiva(rng, meta) {
     const templates = [
       () => {
         const n = rInt(rng, 10, 99);
-        const d = Math.floor(n/10)*10;
-        const u = n%10;
+        const d = Math.floor(n / 10) * 10;
+        const u = n % 10;
         return mcq({
-          id: qid(meta, "da-"+n),
+          id: qid(meta, "da-" + n),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cuál es una descomposición aditiva de ${n}?`,
           correct: `${d} + ${u}`,
-          distractors: [`${d-10} + ${u+10}`, `${u} + ${d}`, `${n} + 0`].slice(0,3),
+          distractors: [`${d - 10} + ${u + 10}`, `${u} + ${d}`, `${n} + 0`].slice(0, 3),
           explanation: "Descomponer = separar en decenas y unidades."
         });
       }
@@ -821,7 +821,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatProblemas(rng, meta){
+  function genMatProblemas(rng, meta) {
     const templates = [
       () => {
         const a = rInt(rng, 1, 20);
@@ -832,11 +832,11 @@
           ? `Tenías ${a} canicas y te dieron ${b}. ¿Cuántas tienes ahora?`
           : `Tenías ${a} galletas y te comiste ${b}. ¿Cuántas quedan?`;
         return mcq({
-          id: qid(meta, "pb-"+a+op+b),
+          id: qid(meta, "pb-" + a + op + b),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: story,
           correct: String(correct),
-          distractors: shuffle(rng, [String(correct+1), String(Math.max(0,correct-1)), String(a), String(b)]).slice(0,3),
+          distractors: shuffle(rng, [String(correct + 1), String(Math.max(0, correct - 1)), String(a), String(b)]).slice(0, 3),
           explanation: op === "+" ? "Sumar = juntar." : "Restar = quitar."
         });
       }
@@ -844,20 +844,20 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatDiasSemana(rng, meta){
-    const days = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
+  function genMatDiasSemana(rng, meta) {
+    const days = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
     const templates = [
       () => {
-        const i = rInt(rng, 0, days.length-1);
+        const i = rInt(rng, 0, days.length - 1);
         const askNext = rng() < 0.5;
         const day = days[i];
-        const correct = askNext ? days[(i+1)%7] : days[(i-1+7)%7];
+        const correct = askNext ? days[(i + 1) % 7] : days[(i - 1 + 7) % 7];
         return mcq({
-          id: qid(meta, "ds-"+day+(askNext?"n":"p")),
+          id: qid(meta, "ds-" + day + (askNext ? "n" : "p")),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: askNext ? `¿Qué día va después de ${day}?` : `¿Qué día va antes de ${day}?`,
           correct,
-          distractors: shuffle(rng, days.filter(d=>d!==correct)).slice(0,3),
+          distractors: shuffle(rng, days.filter(d => d !== correct)).slice(0, 3),
           explanation: "Recuerda el orden de la semana."
         });
       }
@@ -865,14 +865,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genMatAyerHoyManana(rng, meta){
+  function genMatAyerHoyManana(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "ahm1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Si hoy es miércoles, mañana será…",
         correct: "jueves",
-        distractors: ["martes","viernes","domingo"],
+        distractors: ["martes", "viernes", "domingo"],
         explanation: "Mañana es el día siguiente."
       }),
       () => mcq({
@@ -880,24 +880,24 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Si hoy es lunes, ayer fue…",
         correct: "domingo",
-        distractors: ["sábado","martes","jueves"],
+        distractors: ["sábado", "martes", "jueves"],
         explanation: "Ayer es el día anterior."
       })
     ];
     return build40(rng, templates, meta);
   }
 
-  function genMatPeso(rng, meta){
+  function genMatPeso(rng, meta) {
     const templates = [
       () => {
         const a = pick(rng, ["pluma", "hoja", "algodón"]);
         const b = pick(rng, ["piedra", "libro", "botella llena"]);
         return mcq({
-          id: qid(meta, "peso-"+a+"-"+b),
+          id: qid(meta, "peso-" + a + "-" + b),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Qué es más pesado?`,
           correct: b,
-          distractors: shuffle(rng, [a, "los dos pesan igual", "ninguno pesa"]).slice(0,3),
+          distractors: shuffle(rng, [a, "los dos pesan igual", "ninguno pesa"]).slice(0, 3),
           explanation: "Pesado = cuesta más levantarlo."
         });
       }
@@ -906,14 +906,14 @@
   }
 
   /* ---------- Generators: Inglés ---------- */
-  function genInglesColors(rng, meta){
+  function genInglesColors(rng, meta) {
     const templates = [
       () => {
         const it = pick(rng, EN.colors);
         const correct = it.en;
-        const wrong = shuffle(rng, EN.colors.filter(x=>x.en!==correct).map(x=>x.en)).slice(0,3);
+        const wrong = shuffle(rng, EN.colors.filter(x => x.en !== correct).map(x => x.en)).slice(0, 3);
         return mcq({
-          id: qid(meta, "c-es-"+it.es),
+          id: qid(meta, "c-es-" + it.es),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cómo se dice "${it.es}" en inglés?`,
           correct,
@@ -925,14 +925,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genInglesColorsGrammar(rng, meta){
+  function genInglesColorsGrammar(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "g1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Completa: "What color ___ it?"`,
         correct: "is",
-        distractors: ["are","am","be"],
+        distractors: ["are", "am", "be"],
         explanation: "Para it (singular) usamos is."
       }),
       () => mcq({
@@ -940,7 +940,7 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Completa: "What color ___ they?"`,
         correct: "are",
-        distractors: ["is","am","be"],
+        distractors: ["is", "am", "be"],
         explanation: "Para they (plural) usamos are."
       }),
       () => mcq({
@@ -948,7 +948,7 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Respuesta correcta: "It ___ green."`,
         correct: "is",
-        distractors: ["are","am","be"],
+        distractors: ["are", "am", "be"],
         explanation: "It is (It's) = singular."
       }),
       () => mcq({
@@ -956,21 +956,21 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Respuesta correcta: "They ___ blue."`,
         correct: "are",
-        distractors: ["is","am","be"],
+        distractors: ["is", "am", "be"],
         explanation: "They are (They're) = plural."
       })
     ];
     return build40(rng, templates, meta);
   }
 
-  function genInglesFamily(rng, meta){
+  function genInglesFamily(rng, meta) {
     const templates = [
       () => {
         const it = pick(rng, EN.family);
         const correct = it.en;
-        const wrong = shuffle(rng, EN.family.filter(x=>x.en!==correct).map(x=>x.en)).slice(0,3);
+        const wrong = shuffle(rng, EN.family.filter(x => x.en !== correct).map(x => x.en)).slice(0, 3);
         return mcq({
-          id: qid(meta, "fam-"+it.es),
+          id: qid(meta, "fam-" + it.es),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cómo se dice "${it.es}" en inglés?`,
           correct,
@@ -982,17 +982,17 @@
     return build40(rng, templates, meta);
   }
 
-  function genInglesAlphabet(rng, meta){
+  function genInglesAlphabet(rng, meta) {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     const templates = [
       () => {
-        const i = rInt(rng, 0, letters.length-2);
+        const i = rInt(rng, 0, letters.length - 2);
         return mcq({
-          id: qid(meta, "az-next-"+letters[i]),
+          id: qid(meta, "az-next-" + letters[i]),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Qué letra va después de "${letters[i]}"?`,
-          correct: letters[i+1],
-          distractors: [letters[Math.max(0,i-1)], letters[i+2], letters[rInt(rng,0,25)]],
+          correct: letters[i + 1],
+          distractors: [letters[Math.max(0, i - 1)], letters[i + 2], letters[rInt(rng, 0, 25)]],
           explanation: "Recuerda el orden del alfabeto."
         });
       }
@@ -1000,14 +1000,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genInglesThisThat(rng, meta){
+  function genInglesThisThat(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "tt1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Completa: "___ is my mom." (cerca)`,
         correct: "This",
-        distractors: ["That","These","Those"],
+        distractors: ["That", "These", "Those"],
         explanation: "This = cerca."
       }),
       () => mcq({
@@ -1015,7 +1015,7 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Completa: "___ is my dad." (lejos)`,
         correct: "That",
-        distractors: ["This","These","Those"],
+        distractors: ["This", "These", "Those"],
         explanation: "That = lejos."
       }),
       () => mcq({
@@ -1023,21 +1023,21 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: `Pregunta correcta: "___ is this?"`,
         correct: "Who",
-        distractors: ["What","Where","When"],
+        distractors: ["What", "Where", "When"],
         explanation: "Who = quién."
       })
     ];
     return build40(rng, templates, meta);
   }
 
-  function genInglesSnacks(rng, meta){
+  function genInglesSnacks(rng, meta) {
     const templates = [
       () => {
         const it = pick(rng, EN.snacks);
         const correct = it.en;
-        const wrong = shuffle(rng, EN.snacks.filter(x=>x.en!==correct).map(x=>x.en)).slice(0,3);
+        const wrong = shuffle(rng, EN.snacks.filter(x => x.en !== correct).map(x => x.en)).slice(0, 3);
         return mcq({
-          id: qid(meta, "sn-"+it.es),
+          id: qid(meta, "sn-" + it.es),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cómo se dice "${it.es}" en inglés?`,
           correct,
@@ -1049,14 +1049,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genInglesThereIsAre(rng, meta){
+  function genInglesThereIsAre(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "tia1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Para UNA cosa usamos…",
         correct: "There is",
-        distractors: ["There are","This is","They are"],
+        distractors: ["There are", "This is", "They are"],
         explanation: "Singular: There is."
       }),
       () => mcq({
@@ -1064,7 +1064,7 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Para MUCHAS cosas usamos…",
         correct: "There are",
-        distractors: ["There is","This is","They is"],
+        distractors: ["There is", "This is", "They is"],
         explanation: "Plural: There are."
       })
     ];
@@ -1072,16 +1072,16 @@
   }
 
   /* ---------- Generators: Ética ---------- */
-  function genEticaBiotico(rng, meta){
-    const biotic = ["planta","árbol","perro","gato","mariposa"];
-    const abiotic = ["agua","aire","roca","luz del sol","tierra"];
+  function genEticaBiotico(rng, meta) {
+    const biotic = ["planta", "árbol", "perro", "gato", "mariposa"];
+    const abiotic = ["agua", "aire", "roca", "luz del sol", "tierra"];
     const templates = [
       () => {
         const askBiotic = rng() < 0.5;
         const correct = askBiotic ? pick(rng, biotic) : pick(rng, abiotic);
-        const distractors = askBiotic ? shuffle(rng, abiotic).slice(0,3) : shuffle(rng, biotic).slice(0,3);
+        const distractors = askBiotic ? shuffle(rng, abiotic).slice(0, 3) : shuffle(rng, biotic).slice(0, 3);
         return mcq({
-          id: qid(meta, "bio-"+(askBiotic?"b":"a")+"-"+correct),
+          id: qid(meta, "bio-" + (askBiotic ? "b" : "a") + "-" + correct),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: askBiotic ? "¿Cuál es un factor biótico?" : "¿Cuál es un factor abiótico?",
           correct,
@@ -1093,7 +1093,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaPlantas(rng, meta){
+  function genEticaPlantas(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "pl1"),
@@ -1115,17 +1115,17 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaEntornos(rng, meta){
-    const env = ["bosque","selva","desierto","playa","montaña"];
+  function genEticaEntornos(rng, meta) {
+    const env = ["bosque", "selva", "desierto", "playa", "montaña"];
     const templates = [
       () => {
         const e = pick(rng, env);
         return mcq({
-          id: qid(meta, "en-"+e),
+          id: qid(meta, "en-" + e),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: `¿Cuál es un entorno natural?`,
           correct: e,
-          distractors: shuffle(rng, ["cine","supermercado","casa","escuela"]).slice(0,3),
+          distractors: shuffle(rng, ["cine", "supermercado", "casa", "escuela"]).slice(0, 3),
           explanation: "Entorno natural = lugar de la naturaleza."
         });
       }
@@ -1133,31 +1133,31 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaAnimales(rng, meta){
-    const noct = ["búho","murciélago"];
-    const diur = ["mariposa","abeja"];
-    const inver = ["lombriz","caracol","mariposa"];
+  function genEticaAnimales(rng, meta) {
+    const noct = ["búho", "murciélago"];
+    const diur = ["mariposa", "abeja"];
+    const inver = ["lombriz", "caracol", "mariposa"];
     const templates = [
       () => {
         const askNoct = rng() < 0.5;
         const correct = askNoct ? pick(rng, noct) : pick(rng, diur);
         return mcq({
-          id: qid(meta, "ani-"+(askNoct?"n":"d")+"-"+correct),
+          id: qid(meta, "ani-" + (askNoct ? "n" : "d") + "-" + correct),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: askNoct ? "¿Cuál es un animal nocturno?" : "¿Cuál es un animal diurno?",
           correct,
-          distractors: askNoct ? shuffle(rng, diur).slice(0,3) : shuffle(rng, noct).slice(0,3),
+          distractors: askNoct ? shuffle(rng, diur).slice(0, 3) : shuffle(rng, noct).slice(0, 3),
           explanation: askNoct ? "Nocturno = activo de noche." : "Diurno = activo de día."
         });
       },
       () => {
         const correct = pick(rng, inver);
         return mcq({
-          id: qid(meta, "sin-h-"+correct),
+          id: qid(meta, "sin-h-" + correct),
           subject: meta.subject, itemId: meta.itemId, topic: meta.title,
           prompt: "¿Cuál es un animal sin huesos (invertebrado)?",
           correct,
-          distractors: shuffle(rng, ["perro","gato","pollo"]).slice(0,3),
+          distractors: shuffle(rng, ["perro", "gato", "pollo"]).slice(0, 3),
           explanation: "Invertebrado = sin huesos."
         });
       }
@@ -1165,7 +1165,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaMovimientos(rng, meta){
+  function genEticaMovimientos(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "mov1"),
@@ -1195,14 +1195,14 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaEmpujarJalar(rng, meta){
+  function genEticaEmpujarJalar(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "ej1"),
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Empujar significa…",
         correct: "alejar algo de ti",
-        distractors: ["traer algo hacia ti","girar","rodar"],
+        distractors: ["traer algo hacia ti", "girar", "rodar"],
         explanation: "Empujar = alejar."
       }),
       () => mcq({
@@ -1210,14 +1210,14 @@
         subject: meta.subject, itemId: meta.itemId, topic: meta.title,
         prompt: "Jalar significa…",
         correct: "traer algo hacia ti",
-        distractors: ["alejar algo de ti","saltar","aplastar"],
+        distractors: ["alejar algo de ti", "saltar", "aplastar"],
         explanation: "Jalar = traer."
       })
     ];
     return build40(rng, templates, meta);
   }
 
-  function genEticaRespeto(rng, meta){
+  function genEticaRespeto(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "rs1"),
@@ -1231,7 +1231,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaRecursos(rng, meta){
+  function genEticaRecursos(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "re1"),
@@ -1253,7 +1253,7 @@
     return build40(rng, templates, meta);
   }
 
-  function genEticaCuidado(rng, meta){
+  function genEticaCuidado(rng, meta) {
     const templates = [
       () => mcq({
         id: qid(meta, "cu1"),
@@ -1276,30 +1276,19 @@
   }
 
   /* ---------- Build 40 helper ---------- */
-  function qid(meta, suffix){
+  function qid(meta, suffix) {
     return `${meta.subject}|${meta.itemId}|${suffix}`;
   }
 
-  function build40(rng, templates, meta){
+  function build40(rng, templates, meta) {
     const out = [];
     let guard = 0;
-    while (out.length < 40 && guard < 2000){
+    // Keep generating from templates as long as we find unique items and don't hit 40
+    while (out.length < 40 && guard < 2000) {
       guard++;
       const q = pick(rng, templates)();
       // ensure unique ids
       if (!out.some(x => x.id === q.id)) out.push(q);
-    }
-    // if templates were too few, pad with slight variations
-    while (out.length < 40){
-      const n = out.length + 1;
-      out.push(mcq({
-        id: qid(meta, "pad-"+n),
-        subject: meta.subject, itemId: meta.itemId, topic: meta.title,
-        prompt: `Pregunta extra de práctica (${n}): ¿Cuál opción es correcta?`,
-        correct: "La correcta",
-        distractors: ["La incorrecta", "Otra incorrecta", "Ninguna"],
-        explanation: "Pregunta de relleno: aumenta banco luego si quieres."
-      }));
     }
     return out;
   }
@@ -1310,7 +1299,7 @@
 
   const ITEMS_BY_SUBJECT = groupBySubject(ITEMS);
 
-  function groupBySubject(items){
+  function groupBySubject(items) {
     const m = {};
     items.forEach(it => {
       if (!m[it.subject]) m[it.subject] = [];
@@ -1319,11 +1308,11 @@
     return m;
   }
 
-  function getItemById(itemId){
+  function getItemById(itemId) {
     return ITEMS.find(i => i.id === itemId) || null;
   }
 
-  function generateItemQuestions(itemObj){
+  function generateItemQuestions(itemObj) {
     const rng = makeRng(itemObj.id);
     const meta = { subject: itemObj.subject, itemId: itemObj.id, title: itemObj.title };
     return itemObj.gen(rng, meta);
@@ -1332,7 +1321,7 @@
   // cache for speed
   const ITEM_Q_CACHE = new Map(); // itemId -> 40 questions
 
-  function get40ForItem(itemId){
+  function get40ForItem(itemId) {
     if (ITEM_Q_CACHE.has(itemId)) return ITEM_Q_CACHE.get(itemId);
     const itemObj = getItemById(itemId);
     if (!itemObj) return [];
@@ -1341,14 +1330,14 @@
     return q40;
   }
 
-  function buildSession({ subject, itemId, total, difficulty, shuffleOn }){
+  function buildSession({ subject, itemId, total, difficulty, shuffleOn }) {
     // difficulty influences option count/distractors via add-ons:
     // For MVP we keep same 3–4 options; in "normal" we add one distractor where possible.
     // (Simple but effective.)
 
     let pool = [];
 
-    if (subject === "Mixto" || itemId === "mixed"){
+    if (subject === "Mixto" || itemId === "mixed") {
       // Mix across all items
       const allItems = ITEMS.slice();
       const rng = makeRng("mixed-session");
@@ -1356,13 +1345,13 @@
       // pull from items round-robin until reach total (without duplicates)
       const used = new Set();
       let idx = 0;
-      while (pool.length < total && idx < 10000){
+      while (pool.length < total && idx < 10000) {
         idx++;
-        const it = order[(idx-1) % order.length];
+        const it = order[(idx - 1) % order.length];
         const q40 = get40ForItem(it.id);
         const rngQ = makeRng(`mix|${it.id}|${idx}`);
         const q = pick(rngQ, q40);
-        if (!used.has(q.id)){
+        if (!used.has(q.id)) {
           used.add(q.id);
           pool.push(adjustDifficulty(q, difficulty));
         }
@@ -1377,13 +1366,13 @@
     return pool.slice(0, total);
   }
 
-  function adjustDifficulty(q, difficulty){
+  function adjustDifficulty(q, difficulty) {
     if (difficulty !== "normal") return q;
     // add one plausible distractor when options are only 3
     if (q.options.length >= 4) return q;
 
     const extra = "No estoy seguro";
-    if (!q.options.includes(extra)){
+    if (!q.options.includes(extra)) {
       const rng = makeRng(q.id + "|diff");
       const opts = q.options.slice();
       opts.push(extra);
@@ -1398,9 +1387,9 @@
      UI: Home items list
   ========================================================== */
 
-  function renderItems(subject){
+  function renderItems(subject) {
     itemsList.innerHTML = "";
-    if (!subject || subject === "Mixto"){
+    if (!subject || subject === "Mixto") {
       itemsHint.textContent = "En Mixto se combinan ítems de todas las materias.";
       return;
     }
@@ -1426,12 +1415,12 @@
      Quiz rendering
   ========================================================== */
 
-  function showScreen(name){
+  function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.add("hidden"));
     screens[name].classList.remove("hidden");
   }
 
-  function setParentsHelp(on){
+  function setParentsHelp(on) {
     playSnd(sndClick);
     state.parentsHelp = on;
     parentsToggleBtn.setAttribute("aria-pressed", on ? "true" : "false");
@@ -1445,12 +1434,12 @@
       : (state.mode === "practice" ? "Tip: En práctica te avisa al momento." : "Tip: En examen, resultados al final.");
   }
 
-  function renderQuestion(){
+  function renderQuestion() {
     const q = state.questions[state.index];
     state.locked = false;
     nextBtn.disabled = true;
 
-    pillProgress.textContent = `${state.index+1}/${state.total}`;
+    pillProgress.textContent = `${state.index + 1}/${state.total}`;
     pillSubject.textContent = state.subject;
     const itemTitle = state.itemId === "mixed" ? "Mixto (varios ítems)" : (getItemById(state.itemId)?.title || "Ítem");
     pillItem.textContent = itemTitle.length > 20 ? (itemTitle.slice(0, 20) + "…") : itemTitle;
@@ -1459,7 +1448,7 @@
     promptEl.textContent = q.prompt;
 
     feedbackEl.classList.add("hidden");
-    feedbackEl.classList.remove("ok","bad");
+    feedbackEl.classList.remove("ok", "bad");
     feedbackEl.textContent = "";
 
     optionsEl.innerHTML = "";
@@ -1474,7 +1463,7 @@
     setParentsHelp(state.parentsHelp);
   }
 
-  function choose(chosenIndex){
+  function choose(chosenIndex) {
     if (state.locked) return;
     state.locked = true;
 
@@ -1492,10 +1481,10 @@
 
     nextBtn.disabled = false;
 
-    if (state.mode === "practice"){
+    if (state.mode === "practice") {
       feedbackEl.classList.remove("hidden");
       feedbackEl.classList.add(correct ? "ok" : "bad");
-      if (correct){
+      if (correct) {
         playSnd(sndCorrect);
         feedbackEl.textContent = "✅ ¡Correcto!";
       } else {
@@ -1509,7 +1498,7 @@
     }
   }
 
-  function revealAnswer(){
+  function revealAnswer() {
     if (!state.parentsHelp) return;
     const q = state.questions[state.index];
 
@@ -1520,9 +1509,9 @@
     feedbackEl.textContent = `👁 Respuesta: "${q.options[q.answerIndex]}".${exp}`;
   }
 
-  function next(){
+  function next() {
     playSnd(sndClick);
-    if (state.index < state.questions.length - 1){
+    if (state.index < state.questions.length - 1) {
       state.index++;
       renderQuestion();
     } else {
@@ -1530,7 +1519,7 @@
     }
   }
 
-  function renderResults(){
+  function renderResults() {
     showScreen("results");
     setParentsHelp(state.parentsHelp);
 
@@ -1548,7 +1537,7 @@
       const li = document.createElement("li");
       const status = a.correct ? "✅" : "❌";
       li.innerHTML = `<strong>${status}</strong> ${escapeHtml(q.prompt)}<br><span class="muted">Tu respuesta: "${escapeHtml(q.options[a.chosenIndex])}"</span>`;
-      if (!a.correct && state.parentsHelp){
+      if (!a.correct && state.parentsHelp) {
         li.innerHTML += `<br><span style="color:#0a7a36; font-weight:900;">Correcta: "${escapeHtml(q.options[q.answerIndex])}"</span>`;
         if (q.explanation) li.innerHTML += `<br><span class="muted">💡 ${escapeHtml(q.explanation)}</span>`;
       }
@@ -1575,7 +1564,7 @@
      Session start
   ========================================================== */
 
-  function startSession(subject, itemId){
+  function startSession(subject, itemId) {
     playSnd(sndClick);
     state.subject = subject;
     state.itemId = itemId || "mixed";
@@ -1605,6 +1594,8 @@
       shuffleOn: state.shuffle
     });
 
+    state.total = state.questions.length; // adjust total to match available questions real size
+
     showScreen("quiz");
     renderQuestion();
   }
@@ -1618,7 +1609,7 @@
 
   startMixedBtn.addEventListener("click", () => startSession("Mixto", "mixed"));
 
-  homeBtn1.addEventListener("click", () => { playSnd(sndClick); showScreen("home"); });
+  homeBtn.addEventListener("click", () => { playSnd(sndClick); showScreen("home"); });
   homeBtn2.addEventListener("click", () => { playSnd(sndClick); showScreen("home"); });
 
   revealBtn.addEventListener("click", revealAnswer);
