@@ -1,17 +1,19 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Zaíd Smart Test</title>
-  
+
   <!-- Google Fonts: Baloo 2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">
@@ -71,60 +73,57 @@
         </div>
 
         <div class="heroCard">
-          <div class="heroCardTitle">Configura una sesión</div>
+          <div class="heroCardTitle">Configuración</div>
 
           <div class="grid2">
             <div>
-              <label>Asignatura</label>
-              <select id="subjectSel"></select>
-              <div class="help">Puedes elegir “Mixto (todo)” también.</div>
-            </div>
-            <div>
-              <label>Ítem del temario</label>
-              <select id="itemSel"></select>
-              <div class="help">Cada ítem genera preguntas diferentes.</div>
-            </div>
-          </div>
-
-          <div class="grid2">
-            <div>
-              <label>Preguntas (10–40)</label>
-              <select id="countSel">
-                <option>10</option><option>15</option><option selected>20</option>
-                <option>25</option><option>30</option><option>35</option><option>40</option>
+              <label>Preguntas</label>
+              <select id="questionCount">
+                <option>10</option>
+                <option>15</option>
+                <option selected>20</option>
+                <option>25</option>
+                <option>30</option>
+                <option>35</option>
+                <option>40</option>
               </select>
             </div>
             <div>
               <label>Modo</label>
-              <select id="modeSel">
-                <option value="practice" selected>Práctica (te dice al momento)</option>
-                <option value="exam">Examen (resultado al final)</option>
+              <select id="sessionMode">
+                <option value="practice" selected>Práctica</option>
+                <option value="exam">Examen</option>
               </select>
             </div>
           </div>
 
           <div class="grid2">
             <div>
-              <label>Mezclar preguntas</label>
-              <select id="shuffleSel">
-                <option value="yes" selected>Sí</option>
-                <option value="no">No</option>
+              <label>Dificultad</label>
+              <select id="difficulty">
+                <option value="easy" selected>Fácil</option>
+                <option value="normal">Normal</option>
               </select>
             </div>
             <div>
-              <label>Tipo de sesión</label>
-              <select id="mixSel">
-                <option value="item" selected>Solo este ítem</option>
-                <option value="subject">Mixto de la asignatura</option>
-                <option value="all">Mixto general (todo)</option>
+              <label>Mezclar preguntas</label>
+              <select id="shuffle">
+                <option value="yes" selected>Sí</option>
+                <option value="no">No</option>
               </select>
             </div>
           </div>
 
           <div class="divider"></div>
 
+          <div class="heroCardTitle" style="margin-top:20px;">Elige qué estudiar</div>
+          <p class="muted" id="itemsHint" style="font-size: 15px; margin-bottom: 12px; font-weight: 600;">Haz clic en
+            una materia de la izquierda o inicia un test mixto de todo.</p>
+
+          <div id="itemsList" style="display:grid; gap:10px;"></div>
+
           <div class="startRow">
-            <button id="startBtn" class="btn btn-primary">🚀 Iniciar sesión</button>
+            <button id="startMixedBtn" class="btn btn-primary">🚀 Iniciar Sesión Mixta (Todo)</button>
           </div>
 
           <div class="micro muted">
@@ -201,4 +200,5 @@
 
   <script src="./app.js"></script>
 </body>
+
 </html>
