@@ -53,6 +53,18 @@
   const retryBtn = $("retryBtn");
   const newBtn = $("newBtn");
 
+  /* ---------- Sounds ---------- */
+  const sndClick = $("snd-click");
+  const sndCorrect = $("snd-correct");
+  const sndWrong = $("snd-wrong");
+  const sndCheer = $("snd-cheer");
+
+  function playSnd(audioEl){
+    if (!audioEl) return;
+    audioEl.currentTime = 0;
+    audioEl.play().catch(e => console.log("Audio play prevented:", e));
+  }
+
   /* ---------- State ---------- */
   const state = {
     parentsHelp: false,
@@ -1402,7 +1414,10 @@
         <span>${escapeHtml(it.title)}</span>
         <span class="itemTag">40</span>
       `;
-      b.addEventListener("click", () => startSession(subject, it.id));
+      b.addEventListener("click", () => {
+        playSnd(sndClick);
+        startSession(subject, it.id);
+      });
       itemsList.appendChild(b);
     });
   }
@@ -1417,6 +1432,7 @@
   }
 
   function setParentsHelp(on){
+    playSnd(sndClick);
     state.parentsHelp = on;
     parentsToggleBtn.setAttribute("aria-pressed", on ? "true" : "false");
     parentsToggleBtn.textContent = on ? "👨‍👩‍👦 Ayuda para padres: ON" : "👨‍👩‍👦 Ayuda para padres: OFF";
@@ -1480,11 +1496,16 @@
       feedbackEl.classList.remove("hidden");
       feedbackEl.classList.add(correct ? "ok" : "bad");
       if (correct){
+        playSnd(sndCorrect);
         feedbackEl.textContent = "✅ ¡Correcto!";
       } else {
+        playSnd(sndWrong);
         const exp = (state.parentsHelp && q.explanation) ? `\n💡 ${q.explanation}` : "";
         feedbackEl.textContent = `❌ Ups. La correcta era: "${q.options[q.answerIndex]}".${exp}`;
       }
+    } else {
+      // In exam mode, still play a generic click sound to confirm selection
+      playSnd(sndClick);
     }
   }
 
@@ -1500,6 +1521,7 @@
   }
 
   function next(){
+    playSnd(sndClick);
     if (state.index < state.questions.length - 1){
       state.index++;
       renderQuestion();
@@ -1534,6 +1556,19 @@
     });
 
     reviewEl.appendChild(ul);
+
+    // Reward!
+    if (pct >= 60) {
+      playSnd(sndCheer);
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#3b82f6', '#22c55e', '#facc15', '#f97316', '#a855f7']
+        });
+      }
+    }
   }
 
   /* =========================================================
@@ -1541,6 +1576,7 @@
   ========================================================== */
 
   function startSession(subject, itemId){
+    playSnd(sndClick);
     state.subject = subject;
     state.itemId = itemId || "mixed";
     state.total = parseInt(questionCount.value, 10);
@@ -1582,13 +1618,14 @@
 
   startMixedBtn.addEventListener("click", () => startSession("Mixto", "mixed"));
 
-  homeBtn1.addEventListener("click", () => showScreen("home"));
-  homeBtn2.addEventListener("click", () => showScreen("home"));
+  homeBtn1.addEventListener("click", () => { playSnd(sndClick); showScreen("home"); });
+  homeBtn2.addEventListener("click", () => { playSnd(sndClick); showScreen("home"); });
 
   revealBtn.addEventListener("click", revealAnswer);
   nextBtn.addEventListener("click", next);
 
   retryBtn.addEventListener("click", () => {
+    playSnd(sndClick);
     if (!state.lastSessionConfig) return showScreen("home");
     const c = state.lastSessionConfig;
     // re-run same session config
@@ -1601,7 +1638,10 @@
     startSession(c.subject, c.itemId);
   });
 
-  newBtn.addEventListener("click", () => showScreen("home"));
+  newBtn.addEventListener("click", () => {
+    playSnd(sndClick);
+    showScreen("home");
+  });
 
   // Home defaults
   setParentsHelp(false);
