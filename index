@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Examen de Zaíd (1° Primaria)</title>
+  <style>
+    :root { --bg:#0b1220; --card:#121b2e; --text:#e8eefc; --muted:#a9b7d6; --ok:#29c77a; --bad:#ff5c6c; --accent:#67b0ff; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background:var(--bg); color:var(--text); }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 18px; }
+    .card { background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px; box-shadow: 0 12px 30px rgba(0,0,0,.25); }
+    h1 { font-size: 20px; margin: 0 0 10px; }
+    h2 { font-size: 16px; margin: 0 0 10px; color: var(--muted); font-weight: 600; }
+    label { display:block; margin: 10px 0 6px; color: var(--muted); }
+    select, button { width:100%; font-size: 16px; padding: 12px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12); background: #0e1730; color: var(--text); }
+    button { cursor:pointer; border-color: rgba(103,176,255,.35); }
+    button:hover { border-color: rgba(103,176,255,.75); }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .small { font-size: 13px; color: var(--muted); }
+    .pill { display:inline-block; padding: 4px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,.14); color: var(--muted); font-size: 12px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .q { font-size: 20px; line-height: 1.25; margin: 10px 0 14px; }
+    .opts { display:grid; gap: 10px; }
+    .opt { text-align:left; background:#0e1730; border: 1px solid rgba(255,255,255,.12); }
+    .opt.correct { border-color: rgba(41,199,122,.9); }
+    .opt.wrong { border-color: rgba(255,92,108,.9); }
+    .feedback { margin-top: 12px; font-size: 16px; }
+    .feedback.ok { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+    .actions { display:flex; gap: 10px; margin-top: 14px; }
+    .actions button { width:auto; flex:1; }
+    .hidden { display:none; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding:2px 6px; border-radius: 6px; border:1px solid rgba(255,255,255,.12); }
+    .footer { margin-top: 12px; opacity:.95; }
+    .hr { height:1px; background:rgba(255,255,255,.08); margin: 12px 0; }
+    @media (max-width: 820px) { .row3 { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } .q{font-size:19px;} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="screen-setup">
+      <h1>📚 Examen de Zaíd (1° primaria)</h1>
+      <p class="small">Banco “gordo” + generador por plantillas. Modo tutor oculto para revelar la correcta 😉</p>
+
+      <div class="row">
+        <div>
+          <label for="subject">Materia</label>
+          <select id="subject">
+            <option value="Mixto">Mixto (todas)</option>
+            <option value="Español">Español</option>
+            <option value="Matemáticas">Matemáticas</option>
+            <option value="Inglés">Inglés</option>
+            <option value="Ética">Ética, Naturaleza y Sociedades</option>
+          </select>
+        </div>
+        <div>
+          <label for="count"># de preguntas</label>
+          <select id="count">
+            <option>5</option>
+            <option selected>10</option>
+            <option>15</option>
+            <option>20</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="mode">Modo</label>
+          <select id="mode">
+            <option value="practice" selected>Práctica (te dice si estuvo bien)</option>
+            <option value="exam">Examen (resultados al final)</option>
+          </select>
+        </div>
+        <div>
+          <label for="shuffle">Orden</label>
+          <select id="shuffle">
+            <option value="yes" selected>Aleatorio</option>
+            <option value="no">En orden</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="row3">
+        <div>
+          <label for="source">Fuente de preguntas</label>
+          <select id="source">
+            <option value="mixed" selected>Mixto (Banco + Generadas)</option>
+            <option value="bank">Solo Banco</option>
+            <option value="generated">Solo Generadas</option>
+          </select>
+          <div class="small">Mixto suele dar lo mejor: estabilidad + variedad.</div>
+        </div>
+        <div>
+          <label for="variants">Variantes por plantillas</label>
+          <select id="variants">
+            <option value="1">1x</option>
+            <option value="2" selected>2x</option>
+            <option value="3">3x</option>
+          </select>
+          <div class="small">Solo aplica si usas “Generadas” o “Mixto”.</div>
+        </div>
+        <div>
+          <label for="difficulty">Dificultad</label>
+          <select id="difficulty">
+            <option value="easy" selected>Fácil</option>
+            <option value="normal">Normal</option>
+          </select>
+          <div class="small">Fácil = directo. Normal = más distractores.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn">Empezar ✅</button>
+      </div>
+
+      <div class="footer small">
+        Truco secreto (adultos): escribe <span class="kbd">ALINA</span> para activar/desactivar modo tutor.
+      </div>
+    </div>
+
+    <div class="card hidden" id="screen-quiz">
+      <div class="topbar">
+        <div class="pill" id="progressPill">1/10</div>
+        <div class="pill" id="subjectPill">Mixto</div>
+        <div class="pill" id="sourcePill">Mixto</div>
+        <div class="pill hidden" id="tutorPill">Modo tutor 👁</div>
+      </div>
+
+      <div class="small" id="topicLine"></div>
+      <div class="q" id="prompt"></div>
+
+      <div class="opts" id="options"></div>
+
+      <div class="feedback hidden" id="feedback"></div>
+
+      <div class="actions">
+        <button id="revealBtn" class="hidden">👁 Mostrar correcta</button>
+        <button id="nextBtn" disabled>Siguiente ➜</button>
+      </div>
+
+      <div class="footer small" id="hintLine"></div>
+    </div>
+
+    <div class="card hidden" id="screen-results">
+      <h1>🏁 Resultados</h1>
+      <h2 id="scoreLine"></h2>
+      <div id="review"></div>
+      <div class="actions">
+        <button id="againBtn">Nueva sesión 🔁</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================================================
+   BANCO (Opción 1) + GENERADOR (Opción 2)
+   Todo en un solo archivo, sin build.
+========================================================= */
+
+/* -------------------------
+   BANCO "GORDO" (Opción 1)
+-------------------------- */
+const BANK = [
+  // ===== Español =====
+  { id:"esp-ni-1", subject:"Español", topic:"Notas informativas", prompt:"¿Para qué sirve una nota informativa?", options:["Para informar sobre un hecho","Para inventar un cuento","Para jugar en el recreo"], answerIndex:0, explanation:"Una nota informativa informa algo real." },
+  { id:"esp-ni-2", subject:"Español", topic:"Notas informativas", prompt:"¿Qué es un título en una nota informativa?", options:["La parte que dice de qué trata","La firma del remitente","Un dibujo"], answerIndex:0 },
+
+  { id:"esp-po-1", subject:"Español", topic:"Poema", prompt:"En un poema, ¿qué es un verso?", options:["Una línea del poema","El final del cuento","Una regla"], answerIndex:0 },
+  { id:"esp-po-2", subject:"Español", topic:"Poema", prompt:"¿Qué es una estrofa?", options:["Grupo de versos","Una pregunta","Un personaje"], answerIndex:0 },
+  { id:"esp-po-3", subject:"Español", topic:"Poema", prompt:"¿Qué es una rima?", options:["Cuando suenan parecido las palabras al final","Cuando gritas fuerte","Cuando dibujas"], answerIndex:0 },
+  { id:"esp-po-4", subject:"Español", topic:"Poema", prompt:"¿Cuál es una onomatopeya?", options:["Miau","Mesa","Verde"], answerIndex:0 },
+
+  { id:"esp-jm-1", subject:"Español", topic:"Juego de mesa", prompt:"¿Qué es una regla en un juego de mesa?", options:["Lo que dice cómo se juega","Un premio","Un dado"], answerIndex:0 },
+  { id:"esp-jm-2", subject:"Español", topic:"Juego de mesa", prompt:"¿Qué es una instrucción?", options:["Un paso que sigues","Una rima","Un personaje"], answerIndex:0 },
+  { id:"esp-jm-3", subject:"Español", topic:"Juego de mesa", prompt:"¿Cuál es la diferencia entre regla e instrucción?", options:["Regla = norma, instrucción = paso","Son lo mismo siempre","Regla = dibujo, instrucción = color"], answerIndex:0 },
+
+  { id:"esp-ca-1", subject:"Español", topic:"Carta", prompt:"¿Qué va al inicio de una carta?", options:["Lugar y fecha","Firma","Despedida"], answerIndex:0 },
+  { id:"esp-ca-2", subject:"Español", topic:"Carta", prompt:"¿Quién envía la carta?", options:["Remitente","Destinatario","Personaje"], answerIndex:0 },
+  { id:"esp-ca-3", subject:"Español", topic:"Carta", prompt:"¿Quién recibe la carta?", options:["Remitente","Destinatario","Narrador"], answerIndex:1 },
+  { id:"esp-ca-4", subject:"Español", topic:"Carta", prompt:"¿Qué es el saludo en una carta?", options:["Hola / Querido...","La fecha","El sello"], answerIndex:0 },
+  { id:"esp-ca-5", subject:"Español", topic:"Carta", prompt:"¿Qué es la despedida en una carta?", options:["Adiós / Con cariño...","El título","Un verso"], answerIndex:0 },
+  { id:"esp-ca-6", subject:"Español", topic:"Carta", prompt:"¿Qué es la firma en una carta?", options:["El nombre de quien envía","El nombre de quien recibe","Un color"], answerIndex:0 },
+
+  { id:"esp-cue-1", subject:"Español", topic:"Cuento", prompt:"¿Cuáles son las partes de un cuento?", options:["Inicio, desarrollo y final","Verso, estrofa y rima","Regla, instrucción y tablero"], answerIndex:0 },
+  { id:"esp-cue-2", subject:"Español", topic:"Cuento", prompt:"¿Qué es un personaje principal?", options:["El más importante de la historia","Un lugar","Una regla"], answerIndex:0 },
+  { id:"esp-cue-3", subject:"Español", topic:"Cuento", prompt:"¿Qué es un personaje secundario?", options:["Aparece pero no es el principal","Nunca aparece","Es la portada"], answerIndex:0 },
+
+  { id:"esp-te-1", subject:"Español", topic:"Obra de teatro", prompt:"En una obra de teatro, ¿qué es un diálogo?", options:["Cuando los personajes hablan","Cuando el perro ladra","Cuando escribes números"], answerIndex:0 },
+  { id:"esp-te-2", subject:"Español", topic:"Obra de teatro", prompt:"¿Qué signos usamos para hacer una pregunta?", options:["¿ ?","¡ !","."], answerIndex:0 },
+  { id:"esp-te-3", subject:"Español", topic:"Obra de teatro", prompt:"¿Qué signos usamos para expresar emoción (¡...!)?", options:["¡ !","¿ ?","."], answerIndex:0 },
+  { id:"esp-te-4", subject:"Español", topic:"Obra de teatro", prompt:"¿Qué signo son los dos puntos?", options:[":",".","¿ ?"], answerIndex:0 },
+  { id:"esp-te-5", subject:"Español", topic:"Obra de teatro", prompt:"¿Para qué sirven los dos puntos (:)?", options:["Para presentar una lista o explicación","Para hacer una pregunta","Para gritar"], answerIndex:0 },
+
+  // ===== Matemáticas =====
+  { id:"mat-num-1", subject:"Matemáticas", topic:"Números", prompt:"¿Qué número va después de 79?", options:["78","80","89"], answerIndex:1 },
+  { id:"mat-num-2", subject:"Matemáticas", topic:"Números", prompt:"¿Qué número va antes de 101?", options:["99","100","110"], answerIndex:1 },
+  { id:"mat-esc-1", subject:"Matemáticas", topic:"Escritura de números", prompt:"¿Cómo se escribe 45?", options:["Cuarenta y cinco","Cincuenta y cuatro","Cuatro y cinco"], answerIndex:0 },
+
+  { id:"mat-fig-1", subject:"Matemáticas", topic:"Figuras geométricas", prompt:"¿Cuál figura es redonda?", options:["Círculo","Rombo","Paralelogramo"], answerIndex:0 },
+  { id:"mat-fig-2", subject:"Matemáticas", topic:"Figuras geométricas", prompt:"¿Cuál figura parece una puerta?", options:["Rectángulo","Óvalo","Círculo"], answerIndex:0 },
+  { id:"mat-fig-3", subject:"Matemáticas", topic:"Figuras geométricas", prompt:"¿Cuál figura tiene 4 lados iguales?", options:["Cuadrado","Óvalo","Círculo"], answerIndex:0 },
+  { id:"mat-fig-4", subject:"Matemáticas", topic:"Figuras geométricas", prompt:"¿Qué figura parece un “huevo”?", options:["Óvalo","Rombo","Cuadrado"], answerIndex:0 },
+
+  { id:"mat-ud-1", subject:"Matemáticas", topic:"Unidades y decenas", prompt:"En el número 37, ¿cuántas decenas hay?", options:["3","7","37"], answerIndex:0 },
+  { id:"mat-ud-2", subject:"Matemáticas", topic:"Unidades y decenas", prompt:"En el número 37, ¿cuántas unidades hay?", options:["3","7","0"], answerIndex:1 },
+
+  { id:"mat-rn-1", subject:"Matemáticas", topic:"Recta numérica", prompt:"En la recta numérica, para sumar normalmente avanzas…", options:["Hacia la derecha","Hacia la izquierda","Hacia abajo"], answerIndex:0 },
+  { id:"mat-rn-2", subject:"Matemáticas", topic:"Recta numérica", prompt:"Si estás en 5 y avanzas 2 a la derecha, llegas a…", options:["3","7","8"], answerIndex:1 },
+
+  { id:"mat-da-1", subject:"Matemáticas", topic:"Problemas", prompt:"Tenías 6 canicas y te dan 3 más. ¿Cuántas tienes?", options:["9","3","6"], answerIndex:0 },
+
+  { id:"mat-dia-1", subject:"Matemáticas", topic:"Días de la semana", prompt:"¿Qué día va después del lunes?", options:["Domingo","Martes","Sábado"], answerIndex:1 },
+  { id:"mat-dia-2", subject:"Matemáticas", topic:"Ayer/hoy/mañana", prompt:"Si hoy es jueves, mañana es…", options:["Miércoles","Viernes","Sábado"], answerIndex:1 },
+
+  { id:"mat-peso-1", subject:"Matemáticas", topic:"Objetos ligeros y pesados", prompt:"¿Qué es más pesado normalmente?", options:["Una piedra","Una pluma","Una hoja"], answerIndex:0 },
+  { id:"mat-peso-2", subject:"Matemáticas", topic:"Objetos ligeros y pesados", prompt:"¿Qué es más ligero normalmente?", options:["Una pluma","Una piedra","Una silla"], answerIndex:0 },
+
+  // ===== Inglés =====
+  { id:"ing-col-1", subject:"Inglés", topic:"Colors Everywhere", prompt:"¿Cómo se dice 'rojo' en inglés?", options:["Red","Blue","Green"], answerIndex:0 },
+  { id:"ing-col-2", subject:"Inglés", topic:"Colors Everywhere", prompt:"¿Cómo se dice 'azul' en inglés?", options:["Orange","Blue","Pink"], answerIndex:1 },
+  { id:"ing-fam-1", subject:"Inglés", topic:"My Family", prompt:"¿Cómo se dice 'mamá' en inglés?", options:["Dad","Mom","Grandma"], answerIndex:1 },
+  { id:"ing-fam-2", subject:"Inglés", topic:"My Family", prompt:"¿Cómo se dice 'abuelo' en inglés?", options:["Grandpa","Sister","Brother"], answerIndex:0 },
+  { id:"ing-gr-1", subject:"Inglés", topic:"There is / There are", prompt:"Para hablar de MUCHAS cosas usamos…", options:["There is","There are","This is"], answerIndex:1 },
+  { id:"ing-gr-2", subject:"Inglés", topic:"There is / There are", prompt:"Para UNA cosa usamos…", options:["There is","There are","They are"], answerIndex:0 },
+  { id:"ing-sn-1", subject:"Inglés", topic:"Snack Time", prompt:"¿Cuál palabra es una comida?", options:["Sandwich","Purple","Grandma"], answerIndex:0 },
+
+  // ===== Ética =====
+  { id:"eti-fa-1", subject:"Ética", topic:"Factores bióticos y abióticos", prompt:"¿Cuál es un factor biótico?", options:["Una planta","Una roca","El aire"], answerIndex:0 },
+  { id:"eti-fa-2", subject:"Ética", topic:"Factores bióticos y abióticos", prompt:"¿Cuál es un factor abiótico?", options:["Un perro","El agua","Un árbol"], answerIndex:1 },
+  { id:"eti-an-1", subject:"Ética", topic:"Animales", prompt:"¿Qué animal suele ser nocturno?", options:["Búho","Gallina","Pato"], answerIndex:0 },
+  { id:"eti-an-2", subject:"Ética", topic:"Animales", prompt:"¿Un animal diurno está activo…?", options:["De día","De noche","Solo en la lluvia"], answerIndex:0 },
+  { id:"eti-ej-1", subject:"Ética", topic:"Empujar y jalar", prompt:"Empujar significa…", options:["Alejar algo de ti","Traer algo hacia ti","Girar"], answerIndex:0 },
+  { id:"eti-ej-2", subject:"Ética", topic:"Empujar y jalar", prompt:"Jalar significa…", options:["Traer algo hacia ti","Alejar algo de ti","Rodar"], answerIndex:0 },
+  { id:"eti-re-1", subject:"Ética", topic:"Respeto", prompt:"Respetar a los seres vivos significa…", options:["Cuidarlos y no lastimarlos","Ignorarlos","Tirar basura"], answerIndex:0 },
+  { id:"eti-cu-1", subject:"Ética", topic:"Cuidado del entorno", prompt:"¿Qué ayuda a cuidar tu entorno?", options:["Tirar basura al piso","Recoger basura","Romper plantas"], answerIndex:1 },
+];
+
+/* -------------------------
+   UTILIDADES
+-------------------------- */
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function choice(arr){ return arr[randInt(0, arr.length-1)]; }
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function uniq(arr){ return Array.from(new Set(arr)); }
+
+function makeMCQ({id, subject, topic, prompt, correct, distractors, difficulty="easy"}) {
+  let options = [correct, ...distractors];
+  options = uniq(options);
+  while (options.length < 3) options.push("Ninguna de las anteriores");
+  if (difficulty === "normal") {
+    while (options.length < 4) options.push("No estoy seguro");
+  } else {
+    options = options.slice(0,3);
+  }
+  options = shuffle(options);
+  const answerIndex = options.indexOf(correct);
+  return { id, subject, topic, prompt, options, answerIndex };
+}
+
+/* -------------------------
+   GENERADOR POR PLANTILLAS (Opción 2)
+-------------------------- */
+const GEN_DATA = {
+  ingles: {
+    colors: ["green","pink","gray","purple","blue","red","yellow","orange","white","brown","black"],
+    family: ["dad","mom","sister","brother","grandpa","grandma"],
+    snacks: ["sandwich","banana","carrot","donut","cupcake","cookie","hamburger","pear","pineapple","hot dog"]
+  },
+  mate: {
+    shapes: ["círculo","rectángulo","cuadrado","óvalo","paralelogramo","rombo"],
+    days: ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"]
+  },
+  etica: {
+    biotic: ["planta","perro","gato","árbol","mariposa"],
+    abiotic: ["agua","aire","roca","luz del sol","tierra"],
+    nocturnal: ["búho","murciélago"],
+    diurnal: ["gallina","mariposa"]
+  }
+};
+
+// Inglés
+function genEnglishColorQuestion(difficulty){
+  const color = choice(GEN_DATA.ingles.colors);
+  return makeMCQ({
+    id: `gen-ing-col-${color}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Inglés",
+    topic: "Colors Everywhere",
+    prompt: "¿Cuál palabra es un color?",
+    correct: color,
+    distractors: [choice(GEN_DATA.ingles.family), choice(GEN_DATA.ingles.snacks), ...shuffle(GEN_DATA.ingles.colors.filter(c=>c!==color)).slice(0,1)],
+    difficulty
+  });
+}
+function genEnglishFamilyQuestion(difficulty){
+  const fam = choice(GEN_DATA.ingles.family);
+  return makeMCQ({
+    id: `gen-ing-fam-${fam}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Inglés",
+    topic: "My Family",
+    prompt: "¿Cuál palabra es de la familia?",
+    correct: fam,
+    distractors: [choice(GEN_DATA.ingles.colors), choice(GEN_DATA.ingles.snacks), ...shuffle(GEN_DATA.ingles.family.filter(x=>x!==fam)).slice(0,1)],
+    difficulty
+  });
+}
+function genThereIsAreQuestion(difficulty){
+  const plural = Math.random() < 0.5;
+  return makeMCQ({
+    id: `gen-ing-there-${plural?"are":"is"}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Inglés",
+    topic: "There is / There are",
+    prompt: plural ? "Para hablar de MUCHAS cosas usamos…" : "Para UNA cosa usamos…",
+    correct: plural ? "There are" : "There is",
+    distractors: plural ? ["There is","This is"] : ["There are","They are"],
+    difficulty
+  });
+}
+
+// Matemáticas
+function genMathUnitsTensQuestion(difficulty){
+  const n = randInt(10, 99);
+  const tens = Math.floor(n/10);
+  const ones = n%10;
+  const askTens = Math.random() < 0.5;
+  const correct = askTens ? String(tens) : String(ones);
+  const distract = shuffle([String(ones),String(tens),String(n), String(randInt(0,9))].filter(x=>x!==correct)).slice(0,3);
+  return makeMCQ({
+    id: `gen-mat-ud-${n}-${askTens?"t":"u"}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject:"Matemáticas",
+    topic:"Unidades y decenas",
+    prompt: askTens ? `En el número ${n}, ¿cuántas decenas hay?` : `En el número ${n}, ¿cuántas unidades hay?`,
+    correct,
+    distractors: distract,
+    difficulty
+  });
+}
+function genMathShapesQuestion(difficulty){
+  const shape = choice(GEN_DATA.mate.shapes);
+  const wrongs = shuffle(GEN_DATA.mate.shapes.filter(s=>s!==shape)).slice(0,3);
+  const prompts = {
+    "círculo": "¿Cuál figura es redonda?",
+    "rectángulo": "¿Cuál figura parece una puerta?",
+    "cuadrado": "¿Cuál figura tiene 4 lados iguales?",
+    "óvalo": "¿Qué figura parece un 'huevo'?",
+    "paralelogramo": "¿Cuál figura parece un rectángulo inclinado?",
+    "rombo": "¿Cuál figura parece un diamante?"
+  };
+  return makeMCQ({
+    id: `gen-mat-shape-${shape}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject:"Matemáticas",
+    topic:"Figuras geométricas",
+    prompt: prompts[shape] || "Elige la figura correcta:",
+    correct: shape,
+    distractors: wrongs,
+    difficulty
+  });
+}
+function genDaysSequenceQuestion(difficulty){
+  const days = GEN_DATA.mate.days;
+  const i = randInt(0, days.length-1);
+  const day = days[i];
+  const next = days[(i+1)%days.length];
+  const prev = days[(i-1+days.length)%days.length];
+  const askNext = Math.random() < 0.5;
+  return makeMCQ({
+    id: `gen-mat-day-${day}-${askNext?"after":"before"}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject:"Matemáticas",
+    topic:"Días de la semana",
+    prompt: askNext ? `¿Qué día va después de ${day}?` : `¿Qué día va antes de ${day}?`,
+    correct: askNext ? next : prev,
+    distractors: shuffle(days.filter(d=>d!==(askNext?next:prev))).slice(0,3),
+    difficulty
+  });
+}
+
+// Ética
+function genBioticAbioticQuestion(difficulty){
+  const askBiotic = Math.random() < 0.5;
+  const correct = askBiotic ? choice(GEN_DATA.etica.biotic) : choice(GEN_DATA.etica.abiotic);
+  const distractors = askBiotic
+    ? shuffle(GEN_DATA.etica.abiotic).slice(0,3)
+    : shuffle(GEN_DATA.etica.biotic).slice(0,3);
+  return makeMCQ({
+    id: `gen-eti-${askBiotic?"biotic":"abiotic"}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject:"Ética",
+    topic:"Factores bióticos y abióticos",
+    prompt: askBiotic ? "¿Cuál es un factor biótico?" : "¿Cuál es un factor abiótico?",
+    correct,
+    distractors,
+    difficulty
+  });
+}
+function genPushPullQuestion(difficulty){
+  const askPush = Math.random() < 0.5;
+  return makeMCQ({
+    id: `gen-eti-pushpull-${askPush?"push":"pull"}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject:"Ética",
+    topic:"Empujar y jalar",
+    prompt: askPush ? "Empujar significa…" : "Jalar significa…",
+    correct: askPush ? "Alejar algo de ti" : "Traer algo hacia ti",
+    distractors: askPush ? ["Traer algo hacia ti","Girar"] : ["Alejar algo de ti","Rodar"],
+    difficulty
+  });
+}
+
+// Español (plantillas V1.1 incl. dos puntos)
+function genSpanishPunctuationQuestion(difficulty){
+  const types = [
+    {
+      topic: "Obra de teatro / Puntuación",
+      prompt: "¿Qué signos usamos para hacer una pregunta?",
+      correct: "¿ ?",
+      distractors: ["¡ !", ".", ":"]
+    },
+    {
+      topic: "Obra de teatro / Puntuación",
+      prompt: "¿Qué signos usamos para expresar emoción (¡...!)?",
+      correct: "¡ !",
+      distractors: ["¿ ?", ".", ":"]
+    },
+    {
+      topic: "Obra de teatro / Puntuación",
+      prompt: "¿Qué signo son los dos puntos?",
+      correct: ":",
+      distractors: [".", "¿ ?", "¡ !"]
+    },
+    {
+      topic: "Obra de teatro / Puntuación",
+      prompt: "¿Para qué sirven los dos puntos (:)?",
+      correct: "Para presentar una lista o explicación",
+      distractors: [
+        "Para hacer una pregunta",
+        "Para gritar",
+        "Para terminar una oración"
+      ]
+    }
+  ];
+  const pick = choice(types);
+  return makeMCQ({
+    id: `gen-esp-punc-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Español",
+    topic: pick.topic,
+    prompt: pick.prompt,
+    correct: pick.correct,
+    distractors: pick.distractors,
+    difficulty
+  });
+}
+function genSpanishStoryPartsQuestion(difficulty){
+  const variations = [
+    {
+      prompt: "¿Cuáles son las partes de un cuento?",
+      correct: "Inicio, desarrollo y final",
+      distractors: ["Título, rima y verso", "Saludo, firma y fecha", "Regla, instrucción y tablero"]
+    },
+    {
+      prompt: "En un cuento, ¿qué pasa al INICIO?",
+      correct: "Se presentan personajes y lugar",
+      distractors: ["Se resuelve el problema", "Se escribe la firma", "Solo hay rimas"]
+    },
+    {
+      prompt: "En un cuento, ¿qué pasa al FINAL?",
+      correct: "Termina la historia y se resuelve",
+      distractors: ["Se presenta el lugar", "Se escribe la fecha", "Se dan instrucciones"]
+    }
+  ];
+  const pick = choice(variations);
+  return makeMCQ({
+    id: `gen-esp-story-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Español",
+    topic: "Cuento",
+    prompt: pick.prompt,
+    correct: pick.correct,
+    distractors: pick.distractors,
+    difficulty
+  });
+}
+function genSpanishMainSecondaryQuestion(difficulty){
+  const variations = [
+    {
+      prompt: "¿Qué es un personaje principal?",
+      correct: "El más importante de la historia",
+      distractors: ["Un lugar", "Una regla", "El título"]
+    },
+    {
+      prompt: "¿Qué es un personaje secundario?",
+      correct: "Aparece pero no es el principal",
+      distractors: ["Nunca aparece", "Es la portada", "Siempre es el héroe"]
+    }
+  ];
+  const pick = choice(variations);
+  return makeMCQ({
+    id: `gen-esp-chars-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Español",
+    topic: "Cuento",
+    prompt: pick.prompt,
+    correct: pick.correct,
+    distractors: pick.distractors,
+    difficulty
+  });
+}
+function genSpanishLetterPartsQuestion(difficulty){
+  const variations = [
+    {
+      topic: "Carta",
+      prompt: "¿Qué va al inicio de una carta?",
+      correct: "Lugar y fecha",
+      distractors: ["Firma", "Despedida", "Tablero"]
+    },
+    {
+      topic: "Carta",
+      prompt: "¿Qué es el saludo en una carta?",
+      correct: "Hola / Querido...",
+      distractors: ["La fecha", "El sello", "Un verso"]
+    },
+    {
+      topic: "Carta",
+      prompt: "¿Qué es la despedida en una carta?",
+      correct: "Adiós / Con cariño...",
+      distractors: ["El título", "El dado", "La pregunta"]
+    },
+    {
+      topic: "Carta",
+      prompt: "¿Qué es la firma en una carta?",
+      correct: "El nombre de quien envía",
+      distractors: ["El nombre de quien recibe", "Un color", "Una figura"]
+    }
+  ];
+  const pick = choice(variations);
+  return makeMCQ({
+    id: `gen-esp-letter-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    subject: "Español",
+    topic: pick.topic,
+    prompt: pick.prompt,
+    correct: pick.correct,
+    distractors: pick.distractors,
+    difficulty
+  });
+}
+
+// Lista final de generadores
+const GENERATORS = [
+  // Español
+  genSpanishPunctuationQuestion,
+  genSpanishStoryPartsQuestion,
+  genSpanishMainSecondaryQuestion,
+  genSpanishLetterPartsQuestion,
+
+  // Inglés
+  genEnglishColorQuestion,
+  genEnglishFamilyQuestion,
+  genThereIsAreQuestion,
+
+  // Matemáticas
+  genMathUnitsTensQuestion,
+  genMathShapesQuestion,
+  genDaysSequenceQuestion,
+
+  // Ética
+  genBioticAbioticQuestion,
+  genPushPullQuestion
+];
+
+function generateQuestions(subject, count, variants, difficulty){
+  const pool = [];
+  const target = Math.max(count * variants, count);
+
+  const gens = GENERATORS.filter(fn => {
+    const name = fn.name;
+    if (subject === "Mixto") return true;
+    if (subject === "Español") return name.includes("Spanish");
+    if (subject === "Matemáticas") return name.includes("Math") || name.includes("Days");
+    if (subject === "Inglés") return name.includes("English") || name.includes("There");
+    if (subject === "Ética") return name.includes("Biotic") || name.includes("Push");
+    return true;
+  });
+
+  if (!gens.length) return [];
+
+  while (pool.length < target) {
+    pool.push(choice(gens)(difficulty));
+  }
+  return shuffle(pool).slice(0, count);
+}
+
+/* -------------------------
+   MOTOR DEL QUIZ
+-------------------------- */
+let session = {
+  subject: "Mixto",
+  mode: "practice",
+  total: 10,
+  index: 0,
+  questions: [],
+  answers: [],
+  tutorMode: false,
+  locked: false,
+  source: "mixed",
+  variants: 2,
+  difficulty: "easy"
+};
+
+function bySubjectFromBank(subject) {
+  if (subject === "Mixto") return BANK.slice();
+  if (subject === "Ética") return BANK.filter(q => q.subject === "Ética");
+  return BANK.filter(q => q.subject === subject);
+}
+
+function pickFromBank(subject, total, doShuffle) {
+  let pool = bySubjectFromBank(subject);
+  if (doShuffle) pool = shuffle(pool);
+  const chosen = [];
+  let k = 0;
+  while (chosen.length < total) {
+    chosen.push(pool[k % pool.length]);
+    k++;
+  }
+  return chosen.slice(0, total);
+}
+
+function mergeUnique(a,b){
+  const map = new Map();
+  [...a,...b].forEach(q => map.set(q.id, q));
+  return Array.from(map.values());
+}
+
+function buildSessionQuestions({subject,total,doShuffle,source,variants,difficulty}){
+  let qs = [];
+  if (source === "bank") {
+    qs = pickFromBank(subject, total, doShuffle);
+  } else if (source === "generated") {
+    const gen = generateQuestions(subject, total, variants, difficulty);
+    qs = gen.length ? gen : pickFromBank(subject, total, doShuffle);
+  } else {
+    const half = Math.ceil(total/2);
+    const bankPart = pickFromBank(subject, half, doShuffle);
+    const genPart = generateQuestions(subject, total - half, variants, difficulty);
+    qs = mergeUnique(bankPart, genPart);
+    if (qs.length < total) {
+      const extra = pickFromBank(subject, total - qs.length, true);
+      qs = qs.concat(extra);
+    }
+    qs = doShuffle ? shuffle(qs) : qs;
+    qs = qs.slice(0,total);
+  }
+  return qs;
+}
+
+// DOM
+const screenSetup = document.getElementById("screen-setup");
+const screenQuiz = document.getElementById("screen-quiz");
+const screenResults = document.getElementById("screen-results");
+
+const subjectSel = document.getElementById("subject");
+const countSel = document.getElementById("count");
+const modeSel = document.getElementById("mode");
+const shuffleSel = document.getElementById("shuffle");
+const sourceSel = document.getElementById("source");
+const variantsSel = document.getElementById("variants");
+const difficultySel = document.getElementById("difficulty");
+
+const startBtn = document.getElementById("startBtn");
+const nextBtn = document.getElementById("nextBtn");
+const revealBtn = document.getElementById("revealBtn");
+const againBtn = document.getElementById("againBtn");
+
+const progressPill = document.getElementById("progressPill");
+const subjectPill = document.getElementById("subjectPill");
+const sourcePill = document.getElementById("sourcePill");
+const tutorPill = document.getElementById("tutorPill");
+const topicLine = document.getElementById("topicLine");
+const promptEl = document.getElementById("prompt");
+const optionsEl = document.getElementById("options");
+const feedbackEl = document.getElementById("feedback");
+const hintLine = document.getElementById("hintLine");
+
+const scoreLine = document.getElementById("scoreLine");
+const reviewEl = document.getElementById("review");
+
+function show(el) { el.classList.remove("hidden"); }
+function hide(el) { el.classList.add("hidden"); }
+function go(screen) { hide(screenSetup); hide(screenQuiz); hide(screenResults); show(screen); }
+
+function explainIfAvailable(q){
+  if (!q.explanation) return "";
+  return `💡 ${q.explanation}`;
+}
+
+function renderTutorUI() {
+  if (session.tutorMode) {
+    show(tutorPill);
+    show(revealBtn);
+    hintLine.textContent = "Modo tutor activo: puedes revelar la respuesta correcta.";
+  } else {
+    hide(tutorPill);
+    hide(revealBtn);
+    hintLine.textContent = session.mode === "practice"
+      ? "Tip: En práctica te avisa al momento."
+      : "Tip: En examen, resultados al final.";
+  }
+}
+
+function renderQuestion() {
+  const q = session.questions[session.index];
+  session.locked = false;
+  nextBtn.disabled = true;
+  feedbackEl.textContent = "";
+  feedbackEl.className = "feedback hidden";
+
+  progressPill.textContent = `${session.index + 1}/${session.total}`;
+  subjectPill.textContent = session.subject === "Ética" ? "Ética, Naturaleza y Sociedades" : session.subject;
+  sourcePill.textContent = session.source === "mixed" ? "Mixto" : (session.source === "bank" ? "Banco" : "Generadas");
+  topicLine.textContent = `Tema: ${q.topic}`;
+  promptEl.textContent = q.prompt;
+
+  optionsEl.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = opt;
+    btn.onclick = () => choose(idx);
+    optionsEl.appendChild(btn);
+  });
+
+  renderTutorUI();
+}
+
+function markOptions(chosenIndex) {
+  const q = session.questions[session.index];
+  const btns = Array.from(optionsEl.querySelectorAll("button"));
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.answerIndex) b.classList.add("correct");
+    if (i === chosenIndex && i !== q.answerIndex) b.classList.add("wrong");
+  });
+}
+
+function choose(chosenIndex) {
+  if (session.locked) return;
+  session.locked = true;
+
+  const q = session.questions[session.index];
+  const correct = chosenIndex === q.answerIndex;
+  session.answers.push({ qid: q.id, chosenIndex, correct });
+
+  markOptions(chosenIndex);
+  nextBtn.disabled = false;
+
+  if (session.mode === "practice") {
+    feedbackEl.classList.remove("hidden");
+    feedbackEl.classList.add(correct ? "ok" : "bad");
+    const extra = correct ? "" : (q.explanation ? `\n${explainIfAvailable(q)}` : "");
+    feedbackEl.textContent = correct ? "✅ ¡Correcto!" : `❌ Ups. La correcta era: "${q.options[q.answerIndex]}".${extra}`;
+  }
+}
+
+function revealCorrect() {
+  if (!session.tutorMode) return;
+  const q = session.questions[session.index];
+  const btns = Array.from(optionsEl.querySelectorAll("button"));
+  btns.forEach((b, i) => { if (i === q.answerIndex) b.classList.add("correct"); });
+  feedbackEl.classList.remove("hidden");
+  feedbackEl.classList.remove("bad");
+  feedbackEl.classList.add("ok");
+  feedbackEl.textContent = `👁 Correcta: "${q.options[q.answerIndex]}". ${explainIfAvailable(q)}`.trim();
+}
+
+function next() {
+  if (session.index < session.total - 1) {
+    session.index++;
+    renderQuestion();
+  } else {
+    renderResults();
+  }
+}
+
+function renderResults() {
+  const correctCount = session.answers.filter(a => a.correct).length;
+  scoreLine.textContent = `Aciertos: ${correctCount} / ${session.total}`;
+
+  reviewEl.innerHTML = "";
+  const ul = document.createElement("ul");
+  ul.style.lineHeight = "1.55";
+  ul.style.paddingLeft = "18px";
+
+  session.questions.forEach((q, i) => {
+    const a = session.answers[i];
+    const li = document.createElement("li");
+    const status = a.correct ? "✅" : "❌";
+    li.innerHTML = `<strong>${status}</strong> ${q.prompt}<br><span class="small">Tu respuesta: "${q.options[a.chosenIndex]}"</span>`;
+    if (!a.correct) {
+      if (session.tutorMode) {
+        li.innerHTML += `<br><span class="small" style="color: var(--ok);">Correcta: "${q.options[q.answerIndex]}"</span>`;
+        if (q.explanation) li.innerHTML += `<br><span class="small">${explainIfAvailable(q)}</span>`;
+      } else {
+        li.innerHTML += `<br><span class="small">Activa modo tutor para ver correctas (truco ALINA).</span>`;
+      }
+    }
+    ul.appendChild(li);
+  });
+
+  reviewEl.appendChild(ul);
+  go(screenResults);
+}
+
+// Eventos
+startBtn.addEventListener("click", () => {
+  session.subject = subjectSel.value;
+  session.mode = modeSel.value;
+  session.total = parseInt(countSel.value, 10);
+  session.source = sourceSel.value;
+  session.variants = parseInt(variantsSel.value, 10);
+  session.difficulty = difficultySel.value;
+
+  const doShuffle = shuffleSel.value === "yes";
+
+  session.index = 0;
+  session.answers = [];
+  session.questions = buildSessionQuestions({
+    subject: session.subject,
+    total: session.total,
+    doShuffle,
+    source: session.source,
+    variants: session.variants,
+    difficulty: session.difficulty
+  });
+
+  go(screenQuiz);
+  renderQuestion();
+});
+
+nextBtn.addEventListener("click", next);
+revealBtn.addEventListener("click", revealCorrect);
+againBtn.addEventListener("click", () => go(screenSetup));
+
+// Modo tutor oculto: "ALINA"
+let buffer = "";
+window.addEventListener("keydown", (e) => {
+  if (e.key.length !== 1) return;
+  buffer += e.key.toUpperCase();
+  if (buffer.length > 10) buffer = buffer.slice(-10);
+  if (buffer.endsWith("ALINA")) {
+    session.tutorMode = !session.tutorMode;
+    buffer = "";
+    if (!screenQuiz.classList.contains("hidden")) renderTutorUI();
+  }
+});
+</script>
+</body>
+</html>
